@@ -1,0 +1,5 @@
+*.zip
+*.swp
+*.swo
+.sass-cache/
+build/

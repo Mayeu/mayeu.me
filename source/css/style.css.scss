@@ -1,0 +1,95 @@
+/* ===== Primary Styles ========================================================
+Author:
+========================================================================== */
+
+@font-face{
+  font-family: 'LindenHill' ;
+  src: url('/fonts/LindenHill-webfont.eot') ;
+  src: url('/fonts/LindenHill-webfont.eot?') format('eot'),
+       url('/fonts/LindenHill-webfont.woff') format('woff'),
+       url('/fonts/LindenHill-webfont.ttf') format('truetype'),
+       url('/fonts/LindenHill-webfont.svg') format('svg') ;
+}
+
+@font-face{
+  font-family: 'LindenHill' ;
+  src: url('/fonts/LindenHill-Itallic-webfont.eot') ;
+  src: url('/fonts/LindenHill-Itallic-webfont.eot?') format('eot'),
+       url('/fonts/LindenHill-Itallic-webfont.woff') format('woff'),
+       url('/fonts/LindenHill-Itallic-webfont.ttf') format('truetype'),
+       url('/fonts/LindenHill-Itallic-webfont.svg') format('svg') ;
+  font-style: italic ;
+}
+
+@import "bootstrap.scss" ;
+/*@import "responsive.scss" ;*/
+
+#container {
+  margin: auto ;
+  margin-top: 10% ;
+}
+
+header h1 {
+  font-family: LindenHill ;
+  text-align: right ;
+  color: #E9E9E9 ;
+  text-shadow: rgba(0,0,0,.3) 1px 1px 1px;
+  font-style: italic;
+}
+
+#main ul {
+  text-align: right ;
+}
+
+#main ul li a {
+  color: black ;
+}
+
+.hglend, .hgl {
+  font-style: oblique;
+}
+
+.hgl:after {
+  content: ", " ;
+}
+
+.hglend:hover, .hgl:hover {
+  font-weight: bold;
+}
+
+.icon {
+  vertical-align: middle ;
+  margin-left: 2px ;
+}
+
+dl#legend {
+  margin: 0px ;
+  margin-top: 20px ;
+  padding: 0px ;
+  float: left ;
+  clear: left ;
+  //width: 690px ;
+  min-height: 32px ;
+}
+
+dl#legend dt {
+  vertical-align: middle ;
+  margin: 0px ;
+  padding-top: 7px ;
+  float: left ;
+  font-size: 0.8em ;
+}
+
+dl#legend dd {
+  margin: 0px ;
+  margin-left: 15px ;
+  padding: 0px ;
+  width: 32px ;
+  float: left ;
+}
+
+/*iframe
+float: right
+clear: right*/
+
+
