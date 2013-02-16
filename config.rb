@@ -6,7 +6,7 @@ Time.zone = "Paris"
 
 activate :blog do |blog|
   # blog.prefix = "blog"
-  blog.permalink = ":lang/:year/:month/:day/:title.html"
+  blog.permalink = "blog/:lang/:year/:month/:day/:title.html"
   blog.sources = "blog/:lang/:year-:month-:day-:title.html"
   # blog.taglink = "tags/:tag.html"
   # blog.layout = "layout"
@@ -53,7 +53,7 @@ page "/feed.xml", :layout => false
 # require 'coffee-filter'
 
 # Automatic image dimensions on image_tag helper
-# activate :automatic_image_sizes
+activate :automatic_image_sizes
 
 ###
 # Page options, layouts, aliases and proxies
@@ -104,7 +104,7 @@ set :images_dir, "img"
 # I18n
 ###
 
-activate :i18n, :langs => [:en, :fr], :mount_at_root => :en
+#activate :i18n, :langs => [:en, :fr], :mount_at_root => :en
 
 
 # Build-specific configuration
