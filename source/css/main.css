@@ -1,22 +1,59 @@
+body > .container {
+   max-width: 600px;
+}
 
+#main ul {
+   text-align: right ;
+}
 
-/* ==========================================================================
-   Author's custom styles
-   ========================================================================== */
+#main ul li a {
+   color: black ;
+}
 
+.hglend, .hgl {
+   font-style: oblique;
+}
 
+.hgl:after {
+   content: ", " ;
+}
 
+.hglend:hover, .hgl:hover {
+   font-weight: bold;
+}
 
+.icon {
+   vertical-align: middle ;
+   margin-left: 2px ;
+}
 
+hr.top {
+   background-image: url('/img/ornaments_page_up.png');
+   height: 57px;
+   width: 580px;
+   margin: auto ;
+   border: 0px;
+}
 
+hr.bottom {
+   background-image: url('/img/ornaments_page_down.png');
+   height: 57px;
+   width: 580px;
+   margin: auto ;
+   border: 0px;
+}
 
+.pull-center {
+   text-align: center;
+}
+.pull-center > .nav {
+   float:none;
+   display:inline-block;
+   *display: inline; *zoom: 1;
+}
 
-
-
-
-
-
-
-
-
-
+footer {
+   text-align: center ;
+   background: url('/img/ornaments_flower_bottom.png') bottom center no-repeat;
+   padding-bottom: 50px;
+}
