@@ -11,15 +11,15 @@
     %title
     %meta{:content => "", :name => "description"}/
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
-    %link{:href => "css/bootstrap.min.css", :rel => "stylesheet"}/
+    = stylesheet_link_tag 'bootstrap.min'
     :css
       body {
           padding-top: 60px;
           padding-bottom: 40px;
       }
-    %link{:href => "css/bootstrap-responsive.min.css", :rel => "stylesheet"}/
-    %link{:href => "css/main.css", :rel => "stylesheet"}/
-    %script{:src => "js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"}
+    = stylesheet_link_tag 'bootstrap-responsive.min', 'main'
+    = javascript_include_tag 'vendor/modernizr-2.6.2-respond-1.1.0.min'
+
   %body
     /[if lt IE 7]
       <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
@@ -62,6 +62,4 @@
     %script{:src => "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"}
     :javascript
       window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')
-    %script{:src => "js/vendor/bootstrap.min.js"}
-    %script{:src => "js/plugins.js"}
-    %script{:src => "js/main.js"}
+    = javascript_include_tag '/vendor/bootstrap.min', 'plugins', 'main'
