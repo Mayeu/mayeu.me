@@ -1,112 +1,105 @@
--# coding: utf-8
-!!! 5
-
--# paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
-<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
-<!-- Consider adding a manifest.appcache: h5bp.com/d/Offline -->
-<!--[if gt IE 8]><!--> 
-%html{ :class => "no-js", :lang => "en"}
-  <!--<![endif]-->
-
+!!!
+/[if lt IE 7] <html class="no-js lt-ie9 lt-ie8 lt-ie7">
+/[if IE 7] <html class="no-js lt-ie9 lt-ie8">
+/[if IE 8] <html class="no-js lt-ie9">
+/ [if gt IE 8]><!
+%html.no-js
+  / <![endif]
   %head
-    %meta{ :charset => "utf-8"}
-
-    -# Always force latest IE rendering engine (even in intranet) & Chrome Frame
-    -# Remove this if you use the .htaccess
-    %meta{ "http-equiv" => "X-UA-Compatible", :content => "IE=edge,chrome=1" }/
-
-    %title="Matthieu Maury webpage"
-
-    %meta{ :name => "description", :content => ""}
-    %meta{ :name => "author", :content => ""}
-
-    -# Mobile viewport optimized
-    %meta{ :name => "viewport", :content => "width=device-width, initial-scale=1.0" }/
-
-    -# %link{ :rel => "stylesheet", :href => "css/bootstrap.css"}/
-      = stylesheet_link_tag 'bootstrap'
-      :css
-        body {
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
+    %title
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %link{:href => "css/bootstrap.min.css", :rel => "stylesheet"}/
+    :css
+      body {
           padding-top: 60px;
           padding-bottom: 40px;
-        }
-
-    -# %link{ :rel => "stylesheet", :href => "css/responsive.css"}/
-      = stylesheet_link_tag 'responsive'
-    -# %link{ :rel => "stylesheet", :href => "css/style.css"}/
-    = stylesheet_link_tag 'style'
- 
-    -# %script{ :src => "js/libs/modernizr-2.5.3-respond-1.1.0.min.js" }
-    = javascript_include_tag 'libs/modernizr.min.js'
-
+      }
+    %link{:href => "css/bootstrap-responsive.min.css", :rel => "stylesheet"}/
+    %link{:href => "css/main.css", :rel => "stylesheet"}/
+    %script{:src => "js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"}
   %body
+    /[if lt IE 7]
+      <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+    / This code is taken from http://twitter.github.com/bootstrap/examples/hero.html
+    .container
 
-    #container
       %header
-        .row
-          .span4
-            %h1 Matthieu Maury
 
-      #main{ :role => "main"}
-        .row
-          .span2{ :class => "offset2"}
-            %ul{ :class => "nav nav-list"}
-              %li= link_to 'About me', '/'
-              %li= link_to 'My resume', '/files/matthieu_maury_resume.pdf'
-              %li= link_to 'Geo Resume', '/georesume'
-              %li.divider
-              - link_icon = image_tag('github-icon.png', :alt => 'Github icon', :class => 'icon')
-              %li= link_to 'Github' + link_icon, 'https://github.com/Mayeu'
-              - link_icon = image_tag('twitter-icon.png', :alt => 'Twitter icon', :class => 'icon')
-              %li= link_to 'Twitter' + link_icon, 'https://twitter.com/Mayeu'
-              - link_icon = image_tag('linkedin-icon.png', :alt => 'linkedin icon', :class => 'icon')
-              %li= link_to 'linkedin' + link_icon, 'https://www.linkedin.com/in/mmaury/en'
+      .row
+        .span10.offset1
+          .navbar
+            .navbar-inner
+              .container
+                %a.btn.btn-navbar{"data-target" => ".nav-collapse", "data-toggle" => "collapse"}
+                  %span.icon-bar
+                  %span.icon-bar
+                  %span.icon-bar
+                .nav-collapse.collapse
+                  %ul.nav
+                    %li.active
+                      %a{:href => "#"} Home
+                    %li
+                      %a{:href => "#about"} About
+                    %li
+                      %a{:href => "#contact"} Contact
+                    %li.dropdown
+                      %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+                        Dropdown
+                        %b.caret
+                      %ul.dropdown-menu
+                        %li
+                          %a{:href => "#"} Action
+                        %li
+                          %a{:href => "#"} Another action
+                        %li
+                          %a{:href => "#"} Something else here
+                        %li.divider
+                        %li.nav-header Nav header
+                        %li
+                          %a{:href => "#"} Separated link
+                        %li
+                          %a{:href => "#"} One more separated link
+                / /.nav-collapse
 
-          .span8
-            = yield
-
-      %footer
-
-    -#
-      Javascript at the bottom for fast page loading
-      Grab Google CDN's jQuery, with a protocol relative URL;
-      fall back to local if necessary
-
-    -# %script{ :src => "//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"}
-    -# :javascript
-      window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"></script>')
-
-    = javascript_include_tag 'libs/jquery-1.7.2.min', 'plugins', 'script'
-    -# %script{ :src => "js/libs/bootstrap/transition.js" }
-    -# %script{ :src => "js/libs/bootstrap/collapse.js" }
-
-    -# %script{ :src => "js/plugins.js" }
-    -# %script{ :src => "js/script.js" }
-
-    -# Change UA-XXXXX-X to be your site's ID
-      :javascript
-        window._gaq = [['_setAccount','UA–32532093–1'],['_trackPageview'],['_trackPageLoadTime'],['_setDomainName', 'neuroco.mp']];
-        Modernizr.load({
-          load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
-        });
-
-    -#
-      <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
-        chromium.org/developers/how-tos/chrome-frame-getting-started -->
-      <!--[if lt IE 7 ]>
-        <script defer src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
-        <script defer>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
-      <![endif]-->
+          / Main hero unit for a primary marketing message or call to action
+          .hero-unit
+            %h1 Hello, world!
+            %p This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.
+            %p
+              %a.btn.btn-primary.btn-large Learn more &raquo;
+          / Example row of columns
+          .row
+            .span4
+              %h2 Heading
+              %p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+              %p
+                %a.btn{:href => "#"} View details &raquo;
+            .span4
+              %h2 Heading
+              %p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+              %p
+                %a.btn{:href => "#"} View details &raquo;
+            .span4
+              %h2 Heading
+              %p Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+              %p
+                %a.btn{:href => "#"} View details &raquo;
+          %hr/
+          %footer
+            %p &copy; Company 2012
+    / /container
+    %script{:src => "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"}
     :javascript
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-32532093-1']);
-      _gaq.push(['_setDomainName', 'neuroco.mp']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src= ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
+      window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')
+    %script{:src => "js/vendor/bootstrap.min.js"}
+    %script{:src => "js/plugins.js"}
+    %script{:src => "js/main.js"}
+    :javascript
+      var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+      g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g,s)}(document,'script'));
+        
