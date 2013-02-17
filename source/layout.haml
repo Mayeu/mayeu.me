@@ -28,10 +28,15 @@
       .row
         .span10
 
-          // Header
-          %header
-            %h1 6x9
-            %h2 Bits Artisan since 2005
+          .row
+            .span8.offset1
+              // Header
+              %header.clearfix
+                = image_tag 'ornaments_left.png', :width => 100, :class => 'pull-left'
+                = image_tag 'ornaments_right.png', :width => 100, :class => 'pull-right'
+                %h1 6x9
+                .clearfix
+                %h2 Bits Artisan since 2005
 
           %hr.top/
 
@@ -57,7 +62,10 @@
         .span10
           %hr.bottom/
           %footer
-            %p Lulz | Beer
+            %p
+              Lulz | Beer | Font by
+              = link_to 'Igino Marini', 'http://iginomarini.com/fell/'
+
     / /container
     %script{:src => "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"}
     :javascript
