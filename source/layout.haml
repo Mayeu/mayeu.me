@@ -17,7 +17,7 @@
           padding-top: 60px;
           padding-bottom: 40px;
       }
-    = stylesheet_link_tag 'bootstrap-responsive.min', 'main'
+    = stylesheet_link_tag 'bootstrap-responsive.min', 'main', 'mfglabs_iconset'
     = javascript_include_tag 'vendor/modernizr-2.6.2-respond-1.1.0.min'
 
   %body
@@ -45,26 +45,43 @@
             %ul.nav.nav-pills
               %li
                 = link_to 'About me', '/'
-              %li
-                = link_to 'Blog', '/blog'
+              /%li
+              /  = link_to 'Blog', '/blog'
               %li
                 = link_to 'My resume', '/files/matthieu_maury_resume.pdf'
               %li
                 = link_to 'Contact', '/contact'
+
+          .pull-center
+            %ul.nav.nav-pills.list-icon
+              %li
+                %a{ :href => 'https://github.com/Mayeu'}
+                  %i.icon-octopus 
+              %li
+                %a{ :href => 'https://twitter.com/Mayeu'}
+                  %i.icon-twitter 
+              %li
+                %a{ :href => 'http://fr.linkedin.com/in/mmaury/en'}
+                  %i.icon-linked_in
           / /.nav-collapse
 
       .row
         .container
+
           .span8.offset1
             = yield
 
       .row
         .span10
           %hr.bottom/
+      .row
+        .span8.offset1
           %footer
             %p
-              Lulz | Beer | Font by
+              CC-BY-SA unless specified otherwise | Font by
               = link_to 'Igino Marini', 'http://iginomarini.com/fell/'
+              and
+              = link_to 'MFG Labs', 'http://mfglabs.github.com/mfglabs-iconset/'
 
     / /container
     %script{:src => "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"}

@@ -2,13 +2,23 @@
 @font-face {
    font-family: 'IMFeDPit29C'; 
    src: url('fonts/IMFeDPit29C.eot');
-   src: local('☺'), url('/fonts/IMF     eDPit29C.woff') format('woff'), url('/fonts/IMFeDPit29C.ttf') format('truetype'), url('/fonts/IMFeDPit29C.svg') format('svg');
+   src: local('☺'), url('/fonts/IMFeDPit29C.woff') format('woff'), url('/fonts/IMFeDPit29C.ttf') format('truetype'), url('/fonts/IMFeDPit29C.svg') format('svg');
+   font-weight: normal;
+   font-style: normal;
+}
+
+@font-face {
+   font-family: 'IMFeDPrm29C'; 
+   src: url('fonts/IMFeDPrm29C.eot');
+   src: local('☺'), url('/fonts/IMFeDPrm29C.woff') format('woff'), url('/fonts/IMFeDPrm29C.ttf') format('truetype'), url('/fonts/IMFeDPrm29C.svg') format('svg');
    font-weight: normal;
    font-style: normal;
 }
 
 body > .container {
    max-width: 600px;
+   font-family: 'IMFeDPrm29C';
+   font-size: 1.2em;
 }
 
 #main ul {
@@ -80,3 +90,27 @@ header > h1 {
 header > h2 {
    text-align: center ;
 }
+
+ul.nav {
+   font-family: 'IMFeDPrm29C';
+   font-size: 1.2em;
+}
+
+footer {
+   font-size: 0.8em;
+}
+
+.list-icon > li > a {
+   color: black;
+}
+
+.list-icon > li > a:hover,
+.list-icon > li > a:focus {
+   background-color: white;
+   color: #08c;
+}
+
+
+
+
+
