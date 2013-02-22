@@ -6,8 +6,8 @@ Time.zone = "Paris"
 
 activate :blog do |blog|
   # blog.prefix = "blog"
-  blog.permalink = "blog/:lang/:year/:month/:day/:title.html"
-  blog.sources = "blog/:lang/:year-:month-:day-:title.html"
+  blog.permalink = "blog/:title.html"
+  blog.sources = "blog/:year-:month-:day-:title.html"
   # blog.taglink = "tags/:tag.html"
   # blog.layout = "layout"
   # blog.summary_separator = /(READMORE)/
@@ -18,7 +18,7 @@ activate :blog do |blog|
   # blog.default_extension = ".markdown"
 
   blog.tag_template = "tag.html"
-  blog.calendar_template = "calendar.html"
+  #blog.calendar_template = "calendar.html"
 
   # blog.paginate = true
   # blog.per_page = 10
