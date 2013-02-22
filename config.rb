@@ -5,19 +5,20 @@
 Time.zone = "Paris"
 
 activate :blog do |blog|
-  # blog.prefix = "blog"
-  blog.permalink = "blog/:title.html"
-  blog.sources = "blog/:year-:month-:day-:title.html"
+
+  #blog.prefix = "blog"
+  blog.permalink = ":title"
+  blog.sources = "blog/:year-:month-:day-:title"
   # blog.taglink = "tags/:tag.html"
-  # blog.layout = "layout"
+  blog.layout = "article_layout"
   # blog.summary_separator = /(READMORE)/
   # blog.summary_length = 250
   # blog.year_link = ":year.html"
   # blog.month_link = ":year/:month.html"
   # blog.day_link = ":year/:month/:day.html"
-  # blog.default_extension = ".markdown"
+  blog.default_extension = ".md"
 
-  blog.tag_template = "tag.html"
+  #blog.tag_template = "tag.html"
   #blog.calendar_template = "calendar.html"
 
   # blog.paginate = true
@@ -53,7 +54,7 @@ page "/feed.xml", :layout => false
 # require 'coffee-filter'
 
 # Automatic image dimensions on image_tag helper
-activate :automatic_image_sizes
+#activate :automatic_image_sizes
 
 ###
 # Page options, layouts, aliases and proxies
