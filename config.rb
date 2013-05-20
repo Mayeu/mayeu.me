@@ -1,9 +1,39 @@
+###
+# Blog settings
+###
+
+Time.zone = "Paris"
+
+activate :blog do |blog|
+
+  #blog.prefix = "blog"
+  blog.permalink = ":title"
+  blog.sources = "blog/:year-:month-:day-:title"
+  # blog.taglink = "tags/:tag.html"
+  blog.layout = "article_layout"
+  # blog.summary_separator = /(READMORE)/
+  # blog.summary_length = 250
+  # blog.year_link = ":year.html"
+  # blog.month_link = ":year/:month.html"
+  # blog.day_link = ":year/:month/:day.html"
+  blog.default_extension = ".md"
+
+  #blog.tag_template = "tag.html"
+  #blog.calendar_template = "calendar.html"
+
+  # blog.paginate = true
+  # blog.per_page = 10
+  # blog.page_link = "page/:num"
+end
+
+page "/feed.xml", :layout => false
+
 ### 
 # Compass
 ###
 
 # Susy grids in Compass
-# First: gem install compass-susy-plugin
+# First: gem install susy
 # require 'susy'
 
 # Change Compass configuration
@@ -17,17 +47,17 @@
 
 # CodeRay syntax highlighting in Haml
 # First: gem install haml-coderay
- require 'haml-coderay'
+# require 'haml-coderay'
 
 # CoffeeScript filters in Haml
 # First: gem install coffee-filter
 # require 'coffee-filter'
 
 # Automatic image dimensions on image_tag helper
-# activate :automatic_image_sizes
+#activate :automatic_image_sizes
 
 ###
-# Page command
+# Page options, layouts, aliases and proxies
 ###
 
 # Per-page layout changes:
@@ -52,6 +82,9 @@
 # Helpers
 ###
 
+# Automatic image dimensions on image_tag helper
+# activate :automatic_image_sizes
+
 # Methods defined in the helpers block are available in templates
 # helpers do
 #   def some_helper
@@ -67,6 +100,25 @@ set :js_dir, "js"
 
 # Change the images directory
 set :images_dir, "img"
+
+###
+# I18n
+###
+
+#activate :i18n, :langs => [:en, :fr], :mount_at_root => :en
+
+###
+# Markdown
+###
+
+require 'kramdown'
+set :markdown_engine, :kramdown
+
+###
+# Codray
+###
+
+require 'coderay'
 
 # Build-specific configuration
 configure :build do
