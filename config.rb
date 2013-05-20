@@ -107,6 +107,18 @@ set :images_dir, "img"
 
 #activate :i18n, :langs => [:en, :fr], :mount_at_root => :en
 
+###
+# Markdown
+###
+
+require 'kramdown'
+set :markdown_engine, :kramdown
+
+###
+# Codray
+###
+
+require 'coderay'
 
 # Build-specific configuration
 configure :build do
