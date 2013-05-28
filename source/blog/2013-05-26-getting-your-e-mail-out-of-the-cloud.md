@@ -1,112 +1,229 @@
 ---
-title: 'Getting your e-mail out of the cloud with openSMTPD'
-date: 2013-05-24
+title: 'Getting your e-mails out of the cloud: Debian, OpenSMTPD, Dovecot'
+date: 2013-05-26
 published: false
 tags: cloud, howto
 ---
 
-## Settings the MX
+I recently wanted to get out of Gmail and finally set up my e-mail server.
+After some day fighting my way through Postfix, Dovecot, I finally got it up
+and running.
 
-## Compiling openSMTPD on Debian
+But after the announce of the production ready version of OpenSMTPD, I got rid
+of Postfix, and switch to OpenSMTPD. So this article should have been about
+Postfix, but it will finally be about OpenSMTPD.
 
-* Installing the needed package :
-apt-get install build-essential bison automake libtool libdb-dev libssl-dev libevent-dev
+Since I had to get all the info from multiple sources and documentation, I
+decided to write about my configuration in one place.
 
-* Download openSMTPD portable version
-http://www.opensmtpd.org/archives/opensmtpd-5.3.2p1.tar.gz
+## What will be set up
+{:.no_toc}
 
-* compiling
+First of all, my goal is not about serving e-mail to thousand of customers, or
+providing an e-mail service to other peoples than me. So I wanted to keep it
+simple, no DBMS, everything in flat file, the minimum of configuration, the
+minimum of softwares, no webmail (for now at least).
+
+My server run Debian 7, so this little guide is made with Debian in mind, but I
+am sure it can be pretty easily ported to any other GNU/Linux (I also made a
+working config on Archlinux), or even \*nix.
+
+There is what I choose to setup and play with:
+
+* OpenSMTPD: to handle SMTP, relaying, and receiving e-mails.
+* Dovecot: to handle IMAP. This protocol may not be a good choice if your e-mails are sensible.
+* Virtual e-mail account: e-mail account are not linked to actual GNU/Linux account.
+* Maildir format.
+* Flat file for frak sake.
+* A secondary server in case your main is down.
+* Anti-spam thingie (in a near futur, currently still not have any spam on my addresses).
+
+## What will NOT be set up
+{:.no_toc}
+
+I do not plan to teach you GNU/Linux or to administrate Debian. You should have
+some (small) knowledge of the \*nix you plan to use, and of the glorious
+command line. I will not explain to you the whole client part to send and get
+your mail on your desktop/smartphone/coffee brewer/toaster/...
+
+And finally, this is not a short article with a copy-this-conf-and-voilà style.
+First, because this generaly do not work, and second, because if something
+break later on you will have no idea of what is the problem.
+
+Let's start :)
+
+* toc
+{:toc}
+
+## Basic Introduction to e-mail
+
+Warning, the following text is really basic. You have been warned.
+
+Basically, e-mail work around a peer-to-peer network of servers, that relay
+e-mail through the SMTP protocol. That is basically all. To know where to send
+the e-mail, we use the MX fields of the DNS. You can have multiple MX fields
+with different priority, which allow you to setup multiple server, so when a
+high priority server is down, the e-mail will be send to a lower priority
+server and again if it is down, until it reach a MX field pointing to a up
+server.
+
+## Settings the MX fields
+
+So, say you manage the domain `example.org`. You have to add something like
+this in your DNS:
+
+~~~
+mx1           IN A     0.0.0.1
+mx2           IN A     0.0.0.2
+.example.org. IN MX 1  mx1.example.org.
+.example.org. IN MX 10 mx2.example.org.
+~~~
+
+## Installing OpenSMTPD on Debian
+
+At the time I setup my server, there is no official package for Debian (it
+seems that one of the main dev of OpenSMTPD have create a amd64 package for
+it's own need, you can found it
+[here](http://www.opensmtpd.org/archives/packages/debian/). Personally I needed
+a armhf version (for my Raspberry Pi), so I compiled my version.)
+
+First, you need all the needed tools to compile the code:
+
+~~~
+# apt-get install build-essential bison automake libtool libdb-dev libssl-dev libevent-dev
+~~~
+
+Next, download and untar the portable version here:
+`http://www.opensmtpd.org/archives/opensmtpd-5.3.2p1.tar.gz`
+
+You can then bootstrap, configure and compile everything. To make it more
+Debian friendly, we add some prefix and sysconfdir option to configure.
+
+~~~
 # ./bootstrap
 # ./configure --prefix="/usr" --sysconfdir="/etc"
 # make
 # make install
-# useradd -c "SMTP Daemon" -d /var/empty -s /sbin/nologin _smtpd
-# mkdir /var/empty
+~~~
 
-* disable exim if present
-# service exim4 stop
-# update-rc.d exim4 disable
+OpenSMTPD use 3 different user to have a good privilege separation, and its launched
+chrooted in `/var/empty` by default. The users names start with an underscore, which is
+a standard in BSD but not in Linux, if its bother you can change the configure file with
+username you wish.
 
-## Settings the mail reception for local
-
-We set the local e-mail to redirect to your personnal addresses.
-
-First, set up the aliases in the standard /etc/aliases (may not exist on your system):
-   # Aliases¬
-   mailer-daemon:   postmaster
-   postmaster:      root
-   nobody:          root
-   hostmaster:      root
-   usenet:          root
-   news:            root
-   webmaster:       www
-   www:             root
-   ftp:             root
-   abuse:           root
-   noc:             root
-   security:        root
-   root:            pi
-
-Make the db : `sudo makemap /etc/aliases`
-
-Now create the basic opensmtpd config:
-
-`touch /etc/smtpd.conf`
-
-And add the following in /etc/smtpd.conf :
+Create the users and the home folder:
 
 ~~~
-# Setup the alias table
-table aliases db:/etc/aliases.db
+# useradd -c "SMTP Daemon" -d /var/empty -s /sbin/nologin _smtpd
+# useradd -c "SMTP Queue" -s /sbin/nologin _smtpq
+# useradd -c "SMTP Filter" -s /sbin/nologin _smtpf
+# mkdir /var/empty
+~~~
 
+If you had an other MTA before the installation of OpenSMTPD, deactivate it.
+In Debian the default is generally Exim4:
+
+~~~
+# service exim4 stop
+# update-rc.d exim4 disable
+~~~
+
+## Setting up OpenSMTPD
+
+### Local email reception
+
+First basic settings, we setup the local e-mail reception to our personnal
+account. The standard file used in debian for creating aliases is
+`/etc/aliases`. So, I redirect everything to `root`, and `root` to `pi` (which
+is my local user):
+
+~~~
+# Aliases
+mailer-daemon:   postmaster
+postmaster:      root
+nobody:          root
+hostmaster:      root
+usenet:          root
+news:            root
+webmaster:       www
+www:             root
+ftp:             root
+abuse:           root
+noc:             root
+security:        root
+root:            pi
+~~~
+
+Now we create the basic opensmtpd config in `/etc/smtpd.conf` and we declare our
+alias table:
+
+~~~
+# Declare the local alias table
+table aliases file:/etc/aliases
+~~~
+
+The `table` command allow you to declare a table with the following syntax:
+`table table_name [type:]path_to_file`. In our case, the type is a simple file,
+check the manpage for all the supported type.
+
+Now we have to listen on the local network interface:
+
+~~~
 # Listenning on local interface
 listen on lo
+~~~
 
+And we deliver the mail:
+
+~~~
 # Deliver local account
 accept for local alias <aliases> deliver to mbox
 ~~~
 
-The `table` command allow you to point to key/values store (in BerkleyDB format in this case - see the `db:` -, but you can also have flat file)
+As you see, the configuration look like [pf](http://www.openbsd.org/faq/pf/)
+(the OpenBSD firewall) and its really readable.
 
-Listen on lo allow you to listen to the internal interface
+By default, all the e-mail are rejected, and the `accept` rule allow you to
+select what e-mail will be accepted. `for local` filter the e-mail that are
+destinated to the local account, and the `alias` check a table to modify the
+recipient of the message.  And finally `deliver to mbox` deliver the e-mail to
+mbox (thank Captain!). You can also deliver to maildir, mta, and maybe other
+(read the fine manual ;))
 
-accept for local will accept local e-mail, alias check the aliases table, deliver to mbox will deliver it to the user inbox
-
-Check your configuration : `smtpd -n`, should result in `configuration OK`
-
-send a test mail `echo "test mail" | mailx root`
-
- You should receive it
-
-That's great, but I personally prefere to receive all this local e-mail to a specific e-mail adresses.
-Time to go on virtual users
-
-I change my /etc/aliasses as:
-   # Aliases
-   mailer-daemon:   postmaster
-   postmaster:      m+pipostmaster@6x9.fr
-   nobody:          root
-   hostmaster:      root
-   usenet:          root
-   news:            root
-   webmaster:       www
-   www:             m+piwww@6x9.fr
-   ftp:             root
-   abuse:           m+piabuse@6x9.fr
-   noc:             root
-   security:        m+pisecurity@6x9.fr
-   root:            m+piroot@6x9.fr
-   pi:              m+pi@6x9.fr
-
-Just change the last line of your config from `accept for local alias` to `accept for local virtual` and we had a rule to relay all mail
+You can check your configuration with:
 
 ~~~
-# Setup the alias table
-table aliases db:/etc/aliases.db
+# smtpd -n
+configuration OK
+~~~
 
-# Listenning on local interface
-listen on lo
+Ok, but I personally prefere to receive all this local e-mail to an other
+e-mail address (later on we will add the virtual account support). So I changed
+my `/etc/aliasses` like this:
 
+~~~
+# Aliases
+mailer-daemon:   postmaster
+postmaster:      m+postmaster@example.org
+nobody:          root
+hostmaster:      root
+usenet:          root
+news:            root
+webmaster:       www
+www:             m+www@example.org
+ftp:             root
+abuse:           m+abuse@example.org
+noc:             root
+security:        m+security@example.org
+root:            m+root@example.org
+pi:              m+pi@example.org
+~~~
+
+To enable that you just have to change the last line of your config from
+`accept for local alias` to `accept for local virtual` and to add a rule to
+relay external e-mails (with the `relay` command):
+
+~~~
 # Deliver local account
 accept for local virtual <aliases> deliver to mbox
 
@@ -114,39 +231,74 @@ accept for local virtual <aliases> deliver to mbox
 accept for any relay
 ~~~
 
-Now all alias pointing to an e-mail will be relayed to the good smtp, and all the classic
-alias will be delivered to the users mailbox.
+Now all alias pointing to an e-mail will be relayed to the good SMTP server,
+and all the local aliases will be delivered to the users mailbox. You should
+know that even if you do not have aliases pointing to a local or virtual inbox,
+you need the `deliver to` command.
 
-## Receiving e-mail
+### Receiving e-mail
 
-Before receiving e-mail, we need to generate a certificate for our server. This will allow use to receive e-mail using tls, which is better for your privacy. (remember kids, you should encrypt all the things)
-Create the certs folder `mkdir /etc/certs/`, generate the certs :
-# openssl genrsa -out /etc/certs/mail.example.com.key 4096
-# openssl req -new -x509 -key /etc/mail/certs/mail.example.com.key \
-     -out /etc/mail/certs/mail.example.com.crt -days 365
-# chmod 600 /etc/certs/mail.example.com.*
+Now it is time to receive some e-mails.
 
-Now we can listen to eth0 with tls support :
+#### TLS
+
+Before receiving e-mail, we will generate a certificate for our server to
+listen and connect with TLS. This is not an obligation, but you really should
+encrypt the maximum of things you use. (Remember kids, you should encrypt all
+the things)
+
+Create the certs folder in `/etc/certs/` (I did not find yet a way to configure
+the folder in an other place), and we generate the certificate :
 
 ~~~
-# Listenning on internet interface
+# openssl genrsa -out /etc/certs/mail.example.com.key 4096
+# openssl req -new -x509 -key /etc/certs/mail.example.com.key \
+     -out /etc/certs/mail.example.com.crt -days 365
+# chmod 600 /etc/certs/mail.example.com.*
+~~~
+
+Now we can listen on eth0 with tls support, and pointing to our certificate using
+the `tls certificate` command:
+
+~~~
+# Listenning on the eth0 interface
 listen on eth0 tls certificate mail.example.com
 ~~~
 
-### Creating the virtual user
+#### Creating the virtual user
 
-Personnaly I put all my virtual user's e-mails in `/var/vmail` owned by the vmail user defined as follow :
-`vmail:x:5000:5000::/var/vmail:/usr/sbin/nologin` and the group vmail:
-`vmail:x:5000:`
+As I stated before, I use only virtual users, to achieve this I setup a `vmail`
+account that will contains all my virtual user in `/var/vmail/virtualuser`.
 
-Now create the folder
-`mkdir /var/vmail`
-`chown vmail:vmail /var/vmail`
+Currently you can not use a passwd type file, so we will have to have a file
+with our virtual username and password (but only for the SMTP
+authentification), and an other file with the virtual user description (uid,
+guid, home). This will also prevent us to have one common file for the virtual
+users of OpenSMTPD and Dovecot. In a futur version OpenSMTPD may support passwd
+type file.
 
-I want to create a virtual user name "m" who will receive e-mail from `m@example.org` and 
-`mayeu@example.org`
+So, I add my vmail user in my `/etc/passwd` :
 
-So add the following in /etc/aliases
+~~~
+vmail:x:5000:5000::/var/vmail:/usr/sbin/nologin
+~~~
+
+and the associated group in `/etc/group`:
+
+~~~
+vmail:x:5000:
+~~~
+
+Do not forget the home folder:
+
+~~~
+# mkdir /var/vmail
+# chown vmail:vmail /var/vmail
+~~~
+
+I want to create a virtual user named `m` who will receive e-mail from
+`m@example.org` and `mayeu@example.org`. I begin by activating the virtual
+domain and adding the virtual aliases in my `/etc/aliases`:
 
 ~~~
 # My virtual addresses
@@ -155,85 +307,100 @@ m@example.org       m
 mayeu@example.org   m
 ~~~
 
-The first line activate the virtual domain.
-After there is the email adresses and the account that will received them
+The syntax is slighty different than the local aliases. First you have to
+activate the virtual domain (may not be needed if it is the name of your
+server), and after you just put the addresses followed by the account name
+without the colon.
 
-Now we create the users db, I put them in /etc/vusers, but I am sure you can put them somewhere else, and even maybe in /etc/aliases :
+Now we create the virtual users file, I personally put them in `/etc/vusers`,
+but I am sure you can put them somewhere else, and even maybe in your
+`/etc/aliases`:
 
 ~~~
 # The virtual user
-m               5000:5000:/var/vmail/m
+m     5000:5000:/var/vmail/m
 ~~~
 
-The syntax is simple, the virtual account name in first (m here), followed by the real UID:GUID:folder where the mail will be delivered
+The syntax is simple, the virtual account name in first, followed by the real
+UID:GUID:folder where the mail will be delivered (so those values should be the
+one you choose precedently)
 
-And now, we add the rule in /etc/smtpd.conf :
+#### Delivering the e-mails to the virtual users
+
+In `/etc/smtpd.conf` we add the following to declare our virtual users:
+
+~~~
+# Declare the virtual users
+table vusers file:/etc/vusers
+~~~
+
+And we deliver:
 
 ~~~
 # Deliver example.org mail to maildir
-accept from any for domain example.org virtual <aliases> userbase <vusers> deliver to maildir "~/"
+accept from any for domain example.org virtual aliases userbase vusers deliver to maildir "~/"
 ~~~
 
-accept from any, because we accept any source that send us an e-mail
-for domain example.org, because we receive the mail for example.org
-virtual <aliasses>, because we use the aliases
-userbase <vusers>, because we do not want to use the system users
-deliver to maildir "~/", because we want to deliver to the virtual home of the user, and directly in the home (/var/vmail/m in my case). If you do not put "~/" smtpd will create a ~/Maildir folder
+We `accept` e-mail `from any` sources, sent to the `domain example.org` using
+the `virtual aliases` table and the `userbase vusers` and we `deliver` them to
+the `maildir "~/"` (which will be expanded to `/var/vmail/m/`). Easy right ?
+
 And voilà, you can receive e-mail for your domain :)
 
-Recap of all the file
+### Current state of the configuration
 
-/etc/aliases:
+`/etc/aliases`:
 
 ~~~
-# Classic alias
+# Aliases
 mailer-daemon:   postmaster
-postmaster:      m+pipostmaster@6x9.fr
+postmaster:      m+postmaster@example.org
 nobody:          root
 hostmaster:      root
 usenet:          root
 news:            root
 webmaster:       www
-www:             m+piwww@6x9.fr
+www:             m+www@example.org
 ftp:             root
-abuse:           m+piabuse@6x9.fr
+abuse:           m+abuse@example.org
 noc:             root
-security:        m+pisecurity@6x9.fr
-root:            m+piroot@6x9.fr
-pi:              m+pi@6x9.fr
+security:        m+security@example.org
+root:            m+root@example.org
+pi:              m+pi@example.org
 
 # My virtual addresses
-tc2.fr:         true
-m@tc2.fr        m
-mayeu@tc2.fr    m
+example.org:        true
+m@example.org       m
+mayeu@example.org   m
 ~~~
 
-/etc/vusers:
+`/etc/vusers`:
 
 ~~~
 # The virtual user
-m               5000:5000:/var/vmail/m
+m     5000:5000:/var/vmail/m
 ~~~
 
-/etc/smtpd.conf:
+`/etc/smtpd.conf`:
 
 ~~~
-# Setup the alias table
-table aliases db:/etc/aliases.db
+# Declare the alias table
+table aliases file:/etc/aliases
 
-# Setup the vuser
-table vusers db:/etc/vusers.db
+# Declare the vuser
+table vusers file:/etc/vusers
 
-# Listenning on local interface
+# Listen on the local interface
 listen on lo
-# Listenning on internet interface
-listen on eth0 tls certificate shoggoth.tc2.fr
 
-# Deliver tc2.fr mail to maildir
-accept from any for domain tc2.fr virtual <aliases> userbase <vusers> deliver to maildir "~/"
+# Listen on the internet interface
+listen on eth0 tls certificate example.org
 
-# Deliver local account
-accept for local virtual <aliases> deliver to mbox
+# Deliver example.org e-mail to maildir
+accept from any for domain example.org virtual aliases userbase vusers deliver to maildir "~/"
+
+# Deliver local accounts
+accept for local virtual aliases deliver to mbox
 
 # Relay every other mail
 accept for any relay
@@ -241,9 +408,12 @@ accept for any relay
 
 ## Checking for open relay
 
-To check for an open relay I used http://www.mailradar.com/openrelay/ and http://mxtoolbox.com/SuperTool.aspx?action=smtp%3exemple.org&run=toolpage# and no open relay, that's cool :)
+To check for an open relay I used those two website:
+[mailradar](http://www.mailradar.com/openrelay/) and
+[mtoolbox](http://mxtoolbox.com/). With the previous configuratio, you should
+not be an open relay :)
 
-## Sending e-mail
+## Sending e-mail with SMTP submission
 
 Now you can receive e-mail, it's time to send from client
 - connect with tls required
@@ -408,11 +578,20 @@ Uncomment disable_plaintext_auth = yes (at the beginning)
 Uncomment !include auth-passwdfile.conf.ext (at the end)
 
 Create `/etc/dovecot/users` with the detail of your user, syntax:
-username:password:guid:uid::home::usrdb_mail=maildir:~/
+username:password:guid:uid::home::userdb_mail=maildir:~/
 
 I personnaly put the exact same things as opensmptd
 
 ssl: open /etc/dovecot/conf.d/10-ssl set ssl=required
+
+#  Backup server:
+
+juste add :
+
+~~~
+# Backup for example.org mail¬
+accept from any for domain exemple.org relay backup mx2.example.org
+~~~
 
 # Source
 local to mail : http://permalink.gmane.org/gmane.mail.opensmtpd.general/428
