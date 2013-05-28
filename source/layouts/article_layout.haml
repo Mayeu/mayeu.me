@@ -4,4 +4,5 @@
       %h1= current_article.title
 
     %section
-      = yield
+      = preserve do
+        = yield
