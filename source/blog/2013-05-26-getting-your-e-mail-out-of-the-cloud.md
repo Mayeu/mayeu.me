@@ -130,6 +130,18 @@ In Debian the default is generally Exim4:
 
 ## Setting up OpenSMTPD
 
+Just before going head first in the OpenSMTPD configuration, this command may
+help you during the configuration:
+
+* Test the config file `smtpd -n`
+* Launch OpenSMTPD in foreground and with debug output `smtpd -dv`
+* Trace some worker `smtpctl trace <name>`
+* See the queue `smtpctl show queue`
+* See some message `smtpctl show <msg_id>`
+* Schedule things `smtpctl schedule`
+
+The `smtpctl` command can do a lot of usefull things, check it :)
+
 ### Local email reception
 
 First basic settings, we setup the local e-mail reception to our personnal
@@ -406,123 +418,85 @@ accept for local virtual aliases deliver to mbox
 accept for any relay
 ~~~
 
-## Checking for open relay
+### Checking for open relay
 
 To check for an open relay I used those two website:
 [mailradar](http://www.mailradar.com/openrelay/) and
-[mtoolbox](http://mxtoolbox.com/). With the previous configuratio, you should
+[mtoolbox](http://mxtoolbox.com/). With the previous configuration, you should
 not be an open relay :)
 
-## Sending e-mail with SMTP submission
+### Sending e-mail with SMTP submission
 
-Now you can receive e-mail, it's time to send from client
-- connect with tls required
-- password required (you can setup ssl auth if you want also)
-- using submission port
+We are now able to receive e-mail, and send them from the local machine. But we
+want to be able to submit e-mail from other computer. It is time to add SMTP
+submission and auth.
 
-First the user will use to connect to smtpd.
-I create a /etc/smtpdauth file to contains the smtpauth user:
+First we have to create the user we will be using to access the SMTP. I have
+created a /etc/smtpdauth file to contains all the smtpauth users:
+
 ~~~
 #User smtpd auth
-mayeu => mayeu:hashpassword}
+mayeu  mayeu:hashpassword
 ~~~
 
-You can put plain text password, or hash them. You should hash them.
-It is the standard linux password hash, you can use perl to generate some:
-
-`perl -e 'print crypt("mysupersecretpassword","\$6\$thesupersalt\$"), "\n"'`
-
-It should return the following : `$6$thesupersalt$NTH5FbDaiFCq93bQbvuBnf8tP.tnUSj8djA8UVO2tYlXPf2/6bbDl8sUDs71Ndx8xmq2n6QcG4Gac50NvHPQM.`
-
-(man 3 crypt for more detail)
-
-don't forget to makemap
-
-We declare the in_auth table:
+You can put your password in plain text, but it is better to hash them.  It use
+the standard `crypt (3)` function of your system. Personally I used the Perl
+crypt function to build a hash (see the `crypt (3)` manpage for more info and how
+its work):
 
 ~~~
-# Setup in_auth table
-table in_auth db:/etc/smtpdauth.db
+$ perl -e 'print crypt("mysupersecretpassword","\$6\$thesupersalt\$"), "\n"'
+$6$thesupersalt$NTH5FbDaiFCq93bQbvuBnf8tP.tnUSj8djA8UVO2tYlXPf2/6bbDl8sUDs71Ndx8xmq2n6QcG4Gac50NvHPQM.
 ~~~
 
-Add the rule to listen fo submission:
+We declare a new table in our `/etc/smtpd.conf`:
+
+~~~
+# Declare the in_auth table
+table in_auth file:/etc/smtpdauth
+~~~
+
+An we add the rule to listen for submission through SMTP:
 
 ~~~
 # Listenning on internet interface for submission (port 587)
-listen on eth0 port 587 tls-require certificate shoggoth.tc2.fr auth <in_auth>
+listen on eth0 port 587 tls-require certificate mail.example.org auth in_auth
 ~~~
 
-port 587, listen on submission port
-tls-require, we want tls
-certificate mail.example.org, point to the certificate (same as the previous one, but you can create a new certificate for this if you wish)
+So, we `listen on eth0 port 587` using `tls-require` with the `certificate
+mail.example.org` (you can create and use an other certificate if you wish).
+And we filter the connection using the `auth in_auth` table.
 
-And that's all, since we have a `accept for any relay` the mail will be relayed automatically. You can try to send an e-mail with a client.
+And that's all, since we have a `accept for any relay` the mail will be relayed
+automatically. You can try to send an e-mail with a client now, and everything will
+work :)
 
-To recap the config :
-
-/etc/aliases:
-
-~~~
-# Classic alias
-mailer-daemon:   postmaster
-postmaster:      m+pipostmaster@6x9.fr
-nobody:          root
-hostmaster:      root
-usenet:          root
-news:            root
-webmaster:       www
-www:             m+piwww@6x9.fr
-ftp:             root
-abuse:           m+piabuse@6x9.fr
-noc:             root
-security:        m+pisecurity@6x9.fr
-root:            m+piroot@6x9.fr
-pi:              m+pi@6x9.fr
-
-# My virtual addresses
-tc2.fr:         true
-m@tc2.fr        m
-mayeu@tc2.fr    m
-~~~
-
-/etc/vusers:
+There is the current `/etc/smtpd.conf` file:
 
 ~~~
-# The virtual user
-m               5000:5000:/var/vmail/m
-~~~
+# Declare the alias table
+table aliases file:/etc/aliases
 
-/etc/smtpdauth:
+# Declare the vuser
+table vusers file:/etc/vusers
 
-~~~
-# User smtpd auth
-mayeu       mayeu:$6$thesupersalt$NTH5FbDaiFCq93bQbvuBnf8tP.tnUSj8djA8UVO2tYlXPf2/    6bbDl8sUDs71Ndx8xmq2n6QcG4Gac50NvHPQM.
-~~~
+# Declare the in_auth table
+table in_auth file:/etc/smtpdauth
 
-/etc/smtpd.conf:
-
-~~~
-# Setup the alias table
-table aliases db:/etc/aliases.db
-
-# Setup the vuser
-table vusers db:/etc/vusers.db
-
-# Setup in_auth table
-table in_auth db:/etc/smtpdauth.db
-
-# Listenning on local interface
+# Listen on the local interface
 listen on lo
-# Listenning on internet interface for relay (port 25)
-listen on eth0 tls certificate shoggoth.tc2.fr
+
+# Listen on the internet interface
+listen on eth0 tls certificate example.org
+
 # Listenning on internet interface for submission (port 587)
 listen on eth0 port 587 tls-require certificate shoggoth.tc2.fr auth <in_auth>
 
-# Deliver tc2.fr mail to maildir
-accept from any for domain tc2.fr virtual <aliases> userbase <vusers> deliver to maildir "~/"
+# Deliver example.org e-mail to maildir
+accept from any for domain example.org virtual aliases userbase vusers deliver to maildir "~/"
 
-# Deliver local account
-accept for local virtual <aliases> deliver to mbox
+# Deliver local accounts
+accept for local virtual aliases deliver to mbox
 
 # Relay every other mail
 accept for any relay
@@ -530,71 +504,305 @@ accept for any relay
 
 ## This is spam, I want ham
 
-So, your smtp server is now up and running, but when you send e-mail to Gmail/Hotmail/whatever, it end up in the spam folder of your contact. This is not good.
-- First things to set, set your reverse dns correctly to match your domain.
-- Second thitgs to set, is the SPF in your DNS
-- Third one, the dkim signature
+We are able to send e-mail, but currently  we are considered spam by 
+most of the other computer. To prevent this, we have to:
+* Correctly configure ou reverse DNS
+* Add a SPF record in our DNS record
+* Add a DKIM signature to the mail, and the key in our DNS record
 
-For dkim we will install dkimproxy
-`apt-get install dkimproxy`
+### Reverse DNS
 
-During the install dkimproxy will generate the needed key in /var/lib/dkimproxy/*.key
+This will depend of your provider. There is no general rule, and you may not
+even be able to set it to the value you wish. The idea is that the domain your
+e-mail use should resolved to an IP that will be reversed to your domain (it is
+a really basic spam countermeasure).
 
-Open the file /etc/dkimproxy/dkimproxy_out.conf (not dkimproxy_in is for checking incomming mail, I won't set it up personally)
+### SPF
 
-Change the domain line, update the keyfile
+SPF stand for Sender Policy Framework. It is a set of rules your setup in your
+DNS record that will prevend e-mail spoofing by verifying the send IP address.
+See [wikipedia](http://en.wikipedia.org/wiki/Sender_Policy_Framework) for all the
+rules and possibility. Personaly my SPF rules is:
 
-Change selector to whatever you wish (in my case I put smtpd)
-Remove "signature domainkeys" old
+~~~
+       3600 IN TXT    "v=spf1 a mx -all"
+~~~
 
- Setup des valeurs dns, redémarrer dkimproxy
+It will only accept IP that are a `A` or `MX` field in my DNS record.
 
-Dans opensmtpd on vas utiliser les tags pour envoyer les messages.
-les messages entrant sont envoyé au proxy dkim, qui renvoie les messages à opensmtpd
+### DKIM
 
-On ajoute le tag TO_DKIM à l'écoute du port de submission.
-on envoie les mail taggé à dkim avec :
+DKIM is a asymetric signature system. The idea is that you provide a public key
+in your DNS record, and your server sign every outgoing mail with the associated
+private key. This will show that the mail originate only from your domain, since
+you will be the only one that can sign the e-mails with this key.
+
+#### DKIMProxy
+
+To do this we will use a signing proxy named DKIMProxy:
+
+~~~
+# apt-get install dkimproxy
+~~~
+
+During the install dkimproxy will generate the needed key in
+/var/lib/dkimproxy/*.key. But as with the ssl certificate, you
+can generate your own key, or use an excisting key.
+
+Open the file `/etc/dkimproxy/dkimproxy_out.conf` (the `dkimproxy_in.conf` is
+for the verifying proxy to check incomming mail, I won't set it up personally,
+at least until my e-mail received too much spam.)
+
+Change the domain line:
+
+~~~
+# specify what domains DKIMproxy can sign for (comma-separated, no spaces)
+domain    example.org
+~~~
+
+Update the keyfile path:
+
+~~~
+# specify location of the private key
+keyfile  /var/lib/dkimproxy/private.key
+~~~
+
+Change the selector value to whatever you wish (in my case I put smtpd):
+
+~~~
+# specify the selector (i.e. the name of the key record put in DNS)
+selector  smtpd
+~~~
+
+This value will be used in your DNS record. This allow you to have different
+private key for different e-mail sending server in the same DNS record.
+
+You can now restart dkimproxy.
+
+#### DNS Record
+
+Now we will add the field in the DNS record. Open your public key (default path
+`/var/lib/dkimproxy/public.key`) and add the following to your DNS:
+
+~~~
+<selector_name>._domainkey   3600 IN TXT    "k=rsa; t=y; p=your_public_key"
+~~~
+
+In my case the value are:
+
+~~~
+smtpd._domainkey   3600 IN TXT    "k=rsa; t=y; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDaY7SvV9yhocQYoQbRcnXMazzyTJO7FGtj4s+BGuGT5OLhy3Fkhwwn1apYENuCBrRqMbWo6ENDO+e731u05Rakf43eSZUKfRAd09tNhlooeyVnO//6Lu+aeArrG+t9mC19xDeTjdTsYsLj3g+Pp9silfuJAs8g9SWfIv+vQ0//3wIDAQAB"
+~~~
+
+Also add the following :
+
+~~~
+_domainkey         3600 IN TXT    "o=-"
+~~~
+
+This rules specify that all the outgoing e-mails will be signed. It is the same
+kind of rules than the SPF, you can search for the DKIM RFC if you wish to
+check all the rules and value possible.
+
+#### OpenSMTPD
+
+Back to `/etc/smtpd.conf`, we will start to use tag to redirect the message
+throught DKIMProxy.
+
+Add `tag TO_DKIM` at the end of the rule listen on the submission port:
+
+~~~
+# Listenning on internet interface for submission (port 587)¬
+listen on eth0 port 587 tls-require certificate mail.example.org auth in_auth tag TO_DKIM
+~~~
+
+Now we add a rule that match every e-mails `tagged` with `TO_DKIM`, and send it
+to DKIMProxy:
+
 ~~~
 # Send to dkim
-accept tagged TO_DKIM for any relay via smtp://127.0.0.1:10027
+accept tagged TO_DKIM for any relay via smtp://127.0.0.1:10028
 ~~~
 
-Now we listen to the out address:porot of dkim with:
+Now we have to listen to the e-mail send back by the proxy:
+
+~~~
 # Listen from DKIMproxy
-listen on lo port 10029 tag FROM_DKIM
-
-When you send an e-mail you should have the folowing : DKIM signing - signed; message-id=<20130526003359.412d0720@cthulhu> in your mail log
-
-If you check the header of the sent mail, you should see the signature
-
-# Dovecot
-
-I did not succeed in my goal of one vusers config for opensmtpd and dovecot
-
-`sudo apt-get install dovecot-core dovecot-imapd`
-
-Open /etc/dovecot/conf.d/10-auth
-Uncomment disable_plaintext_auth = yes (at the beginning)
-Uncomment !include auth-passwdfile.conf.ext (at the end)
-
-Create `/etc/dovecot/users` with the detail of your user, syntax:
-username:password:guid:uid::home::userdb_mail=maildir:~/
-
-I personnaly put the exact same things as opensmptd
-
-ssl: open /etc/dovecot/conf.d/10-ssl set ssl=required
-
-#  Backup server:
-
-juste add :
-
-~~~
-# Backup for example.org mail¬
-accept from any for domain exemple.org relay backup mx2.example.org
+listen on lo port 10029
 ~~~
 
-# Source
-local to mail : http://permalink.gmane.org/gmane.mail.opensmtpd.general/428
-vmail : http://www.opensmtpd.org/presentations/asiabsdcon2013-smtpd/#slide-18
+And that is all :) Your outgoing e-mail should be signed. In your `mail.log` you should
+see these kind of log messages:
 
+~~~
+DKIM signing - signed; message-id=<20130526003359.412d0720@cthulhu>
+~~~
 
+And if you check the header of the sent mail, you should see the signature You
+can "debug" any problem using the [port25
+service](http://www.port25.com/support/authentication-center/email-verification/),
+this will help you to easily check if your e-mail are ham or spam, if the SPF
+allow the e-mail, and if it is correctly signed. Do not forget to wait the time
+your DNS record propagate! Also, if your server support IPV4 and IPV6, ensure
+that your DNS record also have the IPV4 and IPV6 address for all fields related
+to e-mail.
+
+## Dovecot
+
+Now we will add support of IMAP using Dovecot. As previously stated, it is not
+possible at this time to use only one vusers config for both OpenSMTPD and
+Dovecot.
+
+First install the needed package:
+
+~~~
+sudo apt-get install dovecot-core dovecot-imapd
+~~~
+
+Open `/etc/dovecot/conf.d/10-auth` and uncomment the following lines:
+
+~~~
+disable_plaintext_auth = yes
+...
+... # lots of lines
+...
+!include auth-passwdfile.conf.ext
+~~~
+
+The last uncomment will activate the possibility to log into Dovecot using a
+passwd like file.
+
+Create `/etc/dovecot/users` with the detail of your virtual users, using the
+folowing syntax (you should note that this file is define in the
+`/etc/dovecot/conf.d/auth-passwdfile.conf.ext` file):
+
+~~~
+username:password:GUID:UID::HOME::userdb_mail=maildir:~/
+~~~
+
+You should put the same `GUID`, `UID`, `HOME` and maildir folder than the ones
+of your OpenSMTPD virtual users.
+
+Personnaly it gives me:
+
+~~~
+m:password:5000:5000::/var/vmail::userdb_mail=maildir:~/
+~~~
+
+Now activate ssl in `/etc/dovecot/conf.d/10-ssl` by setting `ssl=required` (A
+default certificate as been generated at the installation).
+
+And that is all, just restart Dovecot and you should be able to reached IMAP on
+the port 143 :)
+
+## Secondary (tertiary,...) server:
+
+To enable a server to be used as a secondary server, and to retains e-mail when
+waiting for a the main server to be back up just add the following in your
+configuration:
+
+~~~
+# Backup for example.com mail¬
+accept from any for domain exemple.com relay backup mx2.example.com
+~~~
+
+As you see it is almost the same as relaying our other e-mail, but we add the
+`backup` command with the domain name of one of the MX fields of your DNS
+record (not the primary one!). When OpenSMTPD will receive an e-mail, for this
+domain, it will check all the MX field, find the one you specify, and try to
+relay the e-mail to the domain with greater priority than the one define.
+
+## Conclusion
+
+There is the final OpenSMTPD configuration:
+
+~~~
+# ###########
+# Table setup
+# ###########
+
+# Declare the alias table
+table aliases file:/etc/aliases
+
+# Declare the vuser
+table vusers file:/etc/vusers
+
+# Declare the in_auth table
+table in_auth file:/etc/smtpdauth
+
+# #################
+# Listen interfaces
+# #################
+
+# Listen on the local interface
+listen on lo
+
+# Listen on the internet interface
+listen on eth0 tls certificate example.org
+
+# Listenning on internet interface for submission (port 587)
+listen on eth0 port 587 tls-require certificate shoggoth.tc2.fr auth in_auth tag TO_DKIM
+
+# Listen from DKIMproxy
+listen on lo port 10029
+
+# ##############
+# Matching rules
+# ##############
+
+# Backup for example.com mail¬
+accept from any for domain exemple.com relay backup mx2.example.com
+
+# Send to dkim
+accept tagged TO_DKIM for any relay via smtp://127.0.0.1:10028
+
+# Deliver example.org e-mail to maildir
+accept from any for domain example.org virtual aliases userbase vusers deliver to maildir "~/"
+
+# Deliver local accounts
+accept for local virtual aliases deliver to mbox
+
+# Relay every other mail
+accept for any relay
+~~~
+
+I found this much more simpler and easier to read than postfix :) I did not
+show you everything that is possible with OpenSMTPD, you can use SQL backend
+for the table, BerkelyDB, and even LDAP (experimental for now).  The set of
+rules is small, but when combined you can make powerful things :)
+
+If you see errors, unclear, or dumb things in this article, do not hesitate to
+drop me an e-mail, you can found my contact [here](/contact).
+
+And before you go, OpenSMTPD had a quick evolution those last months, and a lot
+of documentation out there is outdated. Beware! In doubt, refer to the manpage ;)
+
+## Source
+
+This is almost all the webpages I read to achieve this. This list may contains
+things that are
+[irrelephant](http://www.maniacworld.com/anything-unrelated-is-irrelephant.jpg):
+
+* [OpenSMTPD website](http://www.opensmtpd.org/)
+* [OpenSMTPD presentation](http://www.opensmtpd.org/presentations/asiabsdcon2013-smtpd/)
+* [smptd.conf manpage](http://www.opensmtpd.org/smtpd.conf.5.html)
+* [OpenSMTPD: fully virtual setups, updated DNS & MTA code, SQLite support](https://www.poolp.org/0x7316/OpenSMTPD:-fully-virtual-setups-updated-DNS--MTA-code-SQLite-support)
+* [config pr0n](http://thread.gmane.org/gmane.mail.opensmtpd.general/501/focus=505)
+* [Le mail sous OpenBSD](http://www.openbsd-edu.net/index.php/Le_mail_sous_OpenBSD#OpenSMTPd)
+* [OpenSMTPD "how to"](https://calomel.org/opensmtpd.html)
+* [My OpenSMTPD Config](http://www.room425.com/?p=60)
+* [Installing OpenSMTPD on Debian Linux](http://bogoflop.com/debian_install_opensmtpd.html)
+* [OpenSMTPD + Debian 6.0 Squeeze HowTo](http://maniatux.fr/index.php?article274/opensmtpd-debian-6-0-squeeze-howto)
+* [OpenSMTPD sur OpenBSD 5.0 avec tls auth + relay](http://maniatux.fr/?article239/opensmtpd-sur-openbsd-5-0-avec-lts-auth-relay)
+* [Aliases to external e-mail addresses](http://permalink.gmane.org/gmane.mail.opensmtpd.general/428)
+* [OpenBSD SMTPd](http://wiki.defcon.no/guides/opensmtpd)
+* [Sender Policy Framework](http://en.wikipedia.org/wiki/Sender_Policy_Framework)
+* [DomainKeys_Identified_Mail](http://en.wikipedia.org/wiki/DomainKeys_Identified_Mail)
+* [port25 e-mail verification](http://www.port25.com/support/authentication-center/email-verification/)
+* [Installation de DKIMProxy sur Postfix](https://admin-serv.net/blog/165/installation-de-dkimproxy-sur-postfix/)
+* [DomainKeys RFC](http://www.ietf.org/rfc/rfc4870.txt)
+* [DKIMProxy usage](http://dkimproxy.sourceforge.net/usage.html)
+* [DKIM/Domainkeys signing via DKIMproxy](http://www.thatsgeeky.com/2011/05/dkimdomainkeys-signing-via-dkimproxy/)
+* [How to create an SHA-512 hashed password for shadow?](http://serverfault.com/questions/330069/how-to-create-an-sha-512-hashed-password-for-shadow)
+* [Dovecot SSL certificate](http://wiki2.dovecot.org/SSL/CertificateCreation)
+* [Dovecot Passwd file](http://wiki2.dovecot.org/AuthDatabase/PasswdFile)

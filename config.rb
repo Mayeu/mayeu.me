@@ -112,6 +112,7 @@ set :images_dir, "img"
 ###
 
 require 'kramdown'
+set :markdown, :autolink => true
 set :markdown_engine, :kramdown
 
 ###
