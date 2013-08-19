@@ -1,3 +1,3 @@
 # Personnal website
 
-Playing with middleman for my personnal website.
+Switching from middleman to nanoc for my personnal website
