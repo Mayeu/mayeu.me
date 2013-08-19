@@ -6,3 +6,4 @@ build/
 tmp/
 crash.log
 Gemfile.lock
+output
