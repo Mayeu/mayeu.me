@@ -13,26 +13,38 @@
 #   item, use the pattern “/about/*/”; “/about/*” will also select the parent,
 #   because “*” matches zero or more characters.
 
-compile '/' do
-  filter :kramdown
-  layout 'default'
+compile '/style/*' do
+  # don’t filter or layout
 end
 
-compile '/stylesheet/' do
+compile '/js/*' do
   # don’t filter or layout
+end
+
+compile '/assets/*' do
 end
 
 compile '*' do
   if item.binary?
     # don’t filter binary items
   else
-    filter :erb
+    filter :kramdown
     layout 'default'
   end
 end
 
-route '/stylesheet/' do
-  '/style.css'
+route '/style/*' do
+  item.identifier.chop + '.' + item[:extension]
+end
+
+route '/js/*' do
+  item.identifier.chop + '.' + item[:extension]
+end
+
+route '/assets/*' do
+  # /static/foo.html/ → /foo.html
+  puts item.identifier
+  item.identifier[7..-2]
 end
 
 route '*' do
@@ -45,4 +57,4 @@ route '*' do
   end
 end
 
-layout '*', :erb
+layout '*', :haml
