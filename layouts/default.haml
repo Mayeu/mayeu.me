@@ -72,7 +72,20 @@
 
           .span8.offset1
             = preserve do
-              = yield
+              - if item[:kind] == 'article'
+                %article
+                  %header
+                    %h1= item[:title]
+                    %p
+                      [
+                      = item[:created_at]
+                      ]
+
+                  %section
+                    = preserve do
+                      = yield
+              - else
+                = yield
 
       .row
         .span10
