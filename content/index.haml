@@ -1,0 +1,32 @@
+%p
+  :markdown
+    Hello, I am **Mayeu**.
+
+%p
+  :markdown
+    Sometimes I **craft things**, other time I **use things**, It also happens
+    that I **explain things**. But really, most of the times I **drink tea**.
+
+%p
+  If you are here it is maybe because we have some interests in common:
+  %span.hgl Neuroscience & Neuroprosthetics
+  %span.hgl Astronomy
+  %span.hgl Computer Security
+  %span.hgl Network & Distribution
+  %span.hgl Open Source
+  %span.hgl Transhumanism & Posthumanism
+  %span.hgl C & Ruby
+  %span.hgl Datalove
+  %span.hgl Snowboard
+  %span.hgl H2G2
+  %span.hgl Meditation
+  %span.hgl P&P RPG
+  and
+  %span.hglend tea
+
+%h2 Last blog articles:
+- sorted_articles().each do |article|
+  %ul
+    %li
+      = link_to article[:title], article
+      %span= article[:created_at]
