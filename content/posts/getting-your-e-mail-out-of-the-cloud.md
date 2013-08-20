@@ -1,25 +1,22 @@
 ---
+kind: article
 title: 'Getting your e-mails out of the cloud: Debian, OpenSMTPD, Dovecot'
-date: 2013-05-26
-published: false
+created_at: 2013-05-26
 tags: cloud, howto
 ---
 
-I recently wanted to get out of Gmail and finally set up my e-mail server.
-After some day fighting my way through Postfix, Dovecot, I finally got it up
-and running.
+I recently (ie.: 7 months ago) wanted to get out of Gmail and finally set up my
+own e-mail server. After some day fighting my way through Postfix and Dovecot,
+I finally got it up and running.
 
 But after the announce of the production ready version of OpenSMTPD, I got rid
 of Postfix, and switch to OpenSMTPD. So this article should have been about
-Postfix, but it will finally be about OpenSMTPD.
-
-Since I had to get all the info from multiple sources and documentation, I
-decided to write about my configuration in one place.
+Postfix, but it will be about OpenSMTPD instead.
 
 ## What will be set up
 {:.no_toc}
 
-First of all, my goal is not about serving e-mail to thousand of customers, or
+First of all, my goal is not about serving e-mail to thousands of customers, or
 providing an e-mail service to other peoples than me. So I wanted to keep it
 simple, no DBMS, everything in flat file, the minimum of configuration, the
 minimum of softwares, no webmail (for now at least).
@@ -36,7 +33,7 @@ There is what I choose to setup and play with:
 * Maildir format.
 * Flat file for frak sake.
 * A secondary server in case your main is down.
-* Anti-spam thingie (in a near futur, currently still not have any spam on my addresses).
+* Anti-spam thingie (in a near futur, currently I still do not have any spam on my addresses).
 
 ## What will NOT be set up
 {:.no_toc}
@@ -50,22 +47,28 @@ And finally, this is not a short article with a copy-this-conf-and-voilà style.
 First, because this generaly do not work, and second, because if something
 break later on you will have no idea of what is the problem.
 
-Let's start :)
+Now let's start :)
 
+## TOC
+{:.no_toc}
 * toc
 {:toc}
 
 ## Basic Introduction to e-mail
 
-Warning, the following text is really basic. You have been warned.
+>Warning, the following text is really basic! You have been warned.
 
-Basically, e-mail work around a peer-to-peer network of servers, that relay
-e-mail through the SMTP protocol. That is basically all. To know where to send
-the e-mail, we use the MX fields of the DNS. You can have multiple MX fields
-with different priority, which allow you to setup multiple server, so when a
-high priority server is down, the e-mail will be send to a lower priority
-server and again if it is down, until it reach a MX field pointing to a up
-server.
+Basically, e-mail work around a peer-to-peer network of servers that relay
+e-mail through the SMTP protocol. That is basically all.
+
+To know where to send the e-mail, we use the MX fields of your DNS. You can
+have multiple MX fields with different priorities, which allow you to setup
+multiple server. When a high priority server is down, the e-mail will be send
+to a lower priority server and again if it is down, until it reach a MX field
+pointing to a up server.
+
+After some time, your lower priority server will try to send back the mail to
+a higher one to ensure proper delivery.
 
 ## Settings the MX fields
 
@@ -79,25 +82,32 @@ mx2           IN A     0.0.0.2
 .example.org. IN MX 10 mx2.example.org.
 ~~~
 
+The number after the MX declaration are the priorities. The lowest priority
+will be tested first.
+
+Also, do not forget (like I did) to setup your `AAAA` fields if you have ipv6
+addresses. It save you debug time later on.
+
 ## Installing OpenSMTPD on Debian
 
 At the time I setup my server, there is no official package for Debian (it
-seems that one of the main dev of OpenSMTPD have create a amd64 package for
-it's own need, you can found it
+seems that the main dev of OpenSMTPD have create a amd64 package for it's own
+need, you can found it
 [here](http://www.opensmtpd.org/archives/packages/debian/). Personally I needed
 a armhf version (for my Raspberry Pi), so I compiled my version.)
 
-First, you need all the needed tools to compile the code:
+First, you need to install all the tools to compile the code:
 
 ~~~
 # apt-get install build-essential bison automake libtool libdb-dev libssl-dev libevent-dev
 ~~~
 
 Next, download and untar the portable version here:
-`http://www.opensmtpd.org/archives/opensmtpd-5.3.2p1.tar.gz`
+`http://www.opensmtpd.org/archives/opensmtpd-5.3.3p1.tar.gz`
 
 You can then bootstrap, configure and compile everything. To make it more
-Debian friendly, we add some prefix and sysconfdir option to configure.
+Debian friendly, we add some prefix and sysconfdir option to configure. I sure
+there is room for improvement in this option.
 
 ~~~
 # ./bootstrap
@@ -106,10 +116,10 @@ Debian friendly, we add some prefix and sysconfdir option to configure.
 # make install
 ~~~
 
-OpenSMTPD use 3 different user to have a good privilege separation, and its launched
-chrooted in `/var/empty` by default. The users names start with an underscore, which is
-a standard in BSD but not in Linux, if its bother you can change the configure file with
-username you wish.
+OpenSMTPD use 3 different users enabling good privileges separation, and its
+launched chrooted in `/var/empty` by default. The users names start with an
+underscore, which is a standard in BSD but not in Linux, if its bother you can
+change the `configure` file with username you wish.
 
 Create the users and the home folder:
 
@@ -133,12 +143,12 @@ In Debian the default is generally Exim4:
 Just before going head first in the OpenSMTPD configuration, this command may
 help you during the configuration:
 
-* Test the config file `smtpd -n`
-* Launch OpenSMTPD in foreground and with debug output `smtpd -dv`
-* Trace some worker `smtpctl trace <name>`
-* See the queue `smtpctl show queue`
-* See some message `smtpctl show <msg_id>`
-* Schedule things `smtpctl schedule`
+* Test the config file: `smtpd -n`
+* Launch OpenSMTPD in foreground and with debug output: `smtpd -dv`
+* Trace some worker: `smtpctl trace <name>`
+* See the queue: `smtpctl show queue`
+* See some message: `smtpctl show <msg_id>`
+* Schedule things: `smtpctl schedule`
 
 The `smtpctl` command can do a lot of usefull things, check it :)
 
@@ -193,14 +203,14 @@ accept for local alias <aliases> deliver to mbox
 ~~~
 
 As you see, the configuration look like [pf](http://www.openbsd.org/faq/pf/)
-(the OpenBSD firewall) and its really readable.
+(the OpenBSD firewall) and is really readable & understandable.
 
 By default, all the e-mail are rejected, and the `accept` rule allow you to
 select what e-mail will be accepted. `for local` filter the e-mail that are
-destinated to the local account, and the `alias` check a table to modify the
-recipient of the message.  And finally `deliver to mbox` deliver the e-mail to
-mbox (thank Captain!). You can also deliver to maildir, mta, and maybe other
-(read the fine manual ;))
+destinated to the local account, and the `alias` check a table to check if the
+account exist (en redirect to the good alias). And finally `deliver to mbox`
+deliver the e-mail to mbox (thank Captain!). You can also deliver to maildir,
+mta, and maybe other (read the fine manual ;))
 
 You can check your configuration with:
 
