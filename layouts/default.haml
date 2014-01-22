@@ -19,7 +19,7 @@
       }
     = stylesheet_tag 'bootstrap-responsive.min'
     = stylesheet_tag 'main'
-    = stylesheet_tag 'fontello'
+    = stylesheet_tag 'icomoon'
     = javascript_tag 'vendor/modernizr-2.6.2-respond-1.1.0.min'
 
   %body
@@ -57,14 +57,17 @@
           .pull-center
             %ul.nav.nav-pills.list-icon
               %li
-                %a{ :href => 'https://github.com/Mayeu'}
-                  %i.icon-github 
+                %a{ :href => 'https://github.com/Mayeu', :title => 'GitHub'}
+                  %i.icon-github
               %li
-                %a{ :href => 'https://twitter.com/Mayeu'}
-                  %i.icon-twitter 
+                %a{ :href => 'https://twitter.com/Mayeu', :title => 'Twitter'}
+                  %i.icon-twitter
               %li
-                %a{ :href => 'http://fr.linkedin.com/in/mmaury/en'}
+                %a{ :href => 'http://www.linkedin.com/in/mayeu/en', :title => 'LinkedIn'}
                   %i.icon-linkedin
+              %li
+                %a{ :href => 'https://github.com/Mayeu/not-on-facebook-icon', :title => 'Not on facebook'}
+                  %i.icon-no-facebook
           / /.nav-collapse
 
       .row
@@ -94,7 +97,9 @@
         .span8.offset1
           %footer
             %p
-              CC-BY-SA unless specified otherwise | Font by
+              CC-BY-SA unless specified otherwise | Not on facebook
+              = link_to 'icon', 'https://github.com/Mayeu/not-on-facebook-icon'
+              | Font by
               = link_to 'Igino Marini', 'http://iginomarini.com/fell/'
               and
               = link_to 'MFG Labs', 'http://mfglabs.github.com/mfglabs-iconset/'
