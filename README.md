@@ -1,3 +1,3 @@
-# Personnal website
+# 6x9.fr
 
-Switching from middleman to nanoc for my personnal website
+My personal website, using [hakyll](http://jaspervdj.be/hakyll/)
