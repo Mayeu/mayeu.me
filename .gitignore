@@ -10,3 +10,6 @@ output
 .gs
 *.o
 *.hi
+site
+_site/
+_cache/
