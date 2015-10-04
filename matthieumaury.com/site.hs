@@ -54,8 +54,8 @@ main = hakyll $ do
                 >>= cleanIndexUrls
 
 
-    match "index.html" $ do
-        route idRoute
+    match "index.md" $ do
+        route   $ setExtension "html"
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let indexCtx =
@@ -63,7 +63,7 @@ main = hakyll $ do
                     constField "title" "Home"                `mappend`
                     defaultContext
 
-            getResourceBody
+            pandocCompiler
                 >>= applyAsTemplate indexCtx
                 >>= loadAndApplyTemplate "templates/centered.html" indexCtx
                 >>= loadAndApplyTemplate "templates/default.html" indexCtx
