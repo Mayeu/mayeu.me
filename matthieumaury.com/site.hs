@@ -8,6 +8,11 @@ import           Data.List              (isSuffixOf, isPrefixOf, isInfixOf,
                                          intercalate, sort)
 
 --------------------------------------------------------------------------------
+archiveTemplate  = "templates/archive.html"
+centeredTemplate = "templates/centered.html"
+postTemplate     = "templates/post.html"
+defaultTemplate  = "templates/default.html"
+
 main :: IO ()
 main = hakyll $ do
     match "images/*" $ do
@@ -25,16 +30,16 @@ main = hakyll $ do
     match (fromList ["about.rst", "contact.md"]) $ do
         route   $ cleanRoute
         compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/centered.html" defaultContext
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext
+            >>= loadAndApplyTemplate centeredTemplate defaultContext
+            >>= loadAndApplyTemplate defaultTemplate defaultContext
             >>= relativizeUrls
             >>= cleanIndexUrls
 
     match "posts/*" $ do
         route $ cleanRoute
         compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/post.html"    postCtx
-            >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= loadAndApplyTemplate postTemplate    postCtx
+            >>= loadAndApplyTemplate defaultTemplate postCtx
             >>= relativizeUrls
             >>= cleanIndexUrls
 
@@ -48,8 +53,8 @@ main = hakyll $ do
                     defaultContext
 
             makeItem ""
-                >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
-                >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+                >>= loadAndApplyTemplate archiveTemplate archiveCtx
+                >>= loadAndApplyTemplate defaultTemplate archiveCtx
                 >>= relativizeUrls
                 >>= cleanIndexUrls
 
@@ -64,8 +69,8 @@ main = hakyll $ do
 
             pandocCompiler
                 >>= applyAsTemplate indexCtx
-                >>= loadAndApplyTemplate "templates/centered.html" indexCtx
-                >>= loadAndApplyTemplate "templates/default.html" indexCtx
+                >>= loadAndApplyTemplate centeredTemplate indexCtx
+                >>= loadAndApplyTemplate defaultTemplate indexCtx
                 >>= relativizeUrls
                 >>= cleanIndexUrls
 
