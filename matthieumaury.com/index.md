@@ -1,5 +1,10 @@
-#Hi, I am Matthieu Maury
-I am freelancer sysadmin and software developper, and you may [hire me](#).
+---
+title: sysadmin, automation & tea
+---
+
+#Hi, I am Matthieu «Mayeu» Maury
+
+I am an independent sysadmin, «devops», and software developer. I'm available for [contract job and consulting](/contact).
 
 I like to write [code](https://github.com/Mayeu) and sometimes [words](/blog).
 
