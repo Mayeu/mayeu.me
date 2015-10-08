@@ -22,7 +22,7 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
-    match (fromList ["about.rst", "contact.markdown"]) $ do
+    match (fromList ["about.rst", "contact.md"]) $ do
         route   $ cleanRoute
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/centered.html" defaultContext
@@ -60,7 +60,6 @@ main = hakyll $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let indexCtx =
                     listField "posts" postCtx (return posts) `mappend`
-                    constField "title" "Home"                `mappend`
                     defaultContext
 
             pandocCompiler
