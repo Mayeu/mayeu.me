@@ -43,7 +43,7 @@ main = hakyll $ do
             >>= relativizeUrls
             >>= cleanIndexUrls
 
-    create ["archive.html"] $ do
+    create ["blog.html"] $ do
         route   $ cleanRoute
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
