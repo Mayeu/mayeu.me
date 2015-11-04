@@ -1,0 +1,160 @@
+/*! HTML5 Boilerplate v5.1.0 | MIT License | https://html5boilerplate.com/ */
+
+/* Color */
+$primary-color: #000
+$secondary-color: #333
+$tertiary-color: #333
+
+// Variables
+$main: 18
+$line: 30
+
+// Vertical rhythm
+
+=font($size)
+  font-size: #{$size/$main}em
+  line-height: #{$line/$size}
+
+=padding($size,$top:0, $bottom:0, $lateral:0)
+  padding: $top*$line/$size+em $lateral+em $bottom*$line/$size+em
+
+/*
+ * Remove text-shadow in selection highlight:
+ * https://twitter.com/miketaylr/status/12228805301
+ *
+ * These selection rule sets have to be separate.
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection
+  background: #b3d4fc
+  text-shadow: none
+
+::selection
+  background: #b3d4fc
+  text-shadow: none
+
+hr
+  border: 0
+  color: #ccc
+  @media only screen and (max-width: 580px)
+    border-top: 1px solid
+    margin: 1em 0
+    padding: 0
+  @media only screen and (min-width: 580px)
+    +font(24)
+    +padding(24,1,2)
+
+    &:before
+      content: "*\a*\00a0\00a0\00a0\00a0*"
+      white-space: pre
+
+/*
+ * Remove the gap between audio, canvas, iframes,
+ * images, videos and the bottom of their containers:
+ * https://github.com/h5bp/html5-boilerplate/issues/440
+ */
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video
+  vertical-align: middle
+
+/* Allow only vertical resizing of textareas. */
+
+textarea
+  resize: vertical
+
+
+html, body
+  height: 100%
+  word-wrap: break-word
+  overflow-wrap: break-word
+
+body
+  color: $primary-color
+  font: 1.125em/1.7 Georgia,Times,serif
+  line-height: 1.4
+  text-align: justify
+
+h1, h2
+  color: $tertiary-color
+
+h1, h2, hr, .date
+  text-align: center
+
+h1
+  font-size: 2em
+
+a,
+a:visited
+  color: $secondary-color
+  text-decoration: none
+
+a, a:visited
+  font-weight: bold
+
+a:hover
+  text-decoration: none
+  border-bottom: 4px solid $secondary-color
+
+.container
+  width: 100%
+  min-height: 100%
+
+  display: flex
+  display: -webkit-box
+  display: -ms-flexbox
+  display: -webkit-flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+
+.content
+  width: 31em
+  margin-bottom: 7px
+  @media only screen and (max-width: 580px)
+    width: 95%
+
+.centered-content
+  text-align: center
+
+h1
+  margin-bottom: 0.4em
+  @media only screen and (max-width: 580px)
+    font-size: 2.3em
+    margin-bottom: 0.3em
+
+.post-content > p:first-of-type:first-letter
+  float: left
+  margin: 0.13em 0.05em 0 -0.05em
+  font-size: 3.333em
+  line-height: 0.75em
+
+//.about > p
+//  font-size: 1.3em
+//  margin-top: 0.3em
+//  margin-bottom: 0.3em
+//  margin-right: 0px
+//  margin-left: 0px
+//  @media only screen and (max-width: 580px)
+//    font-size: 1.2em
+//    margin-top: 0.2em
+//    margin-bottom: 0.2em
+
+footer
+  margin-bottom: 7px
+  width: 590px
+  @media only screen and (max-width: 580px)
+    width: 95%
+
+footer > p
+  text-align: center
+  font-size: 0.9em
+  font-family: sans-serif
+  margin-top: 1.2em
+  @media only screen and (max-width: 580px)
+    margin-top: 1.0em

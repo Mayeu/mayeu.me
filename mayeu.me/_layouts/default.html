@@ -1,0 +1,33 @@
+<!doctype html>
+<html class="no-js about-me" lang="">
+
+  {% include head.html %}
+
+  <body>
+    <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+    <div class="container">
+      <div class="content">
+        {{ content }}
+      </div>
+
+      <footer>
+        <hr />
+        <p>
+          :: <a href="/">home</a>
+          :: <a href="/blog">blog</a>
+          :: <a href="https://github.com/Mayeu">github</a>
+          :: <a href="https://twitter.com/Mayeu">twitter</a>
+          :: <a href="http://www.linkedin.com/in/mayeu/en">linkedin</a>
+          :: <a href="{{ "/feed.xml" | prepend: site.baseurl }}">rss</a> ::
+        </p>
+      </footer>
+    </div>
+
+    <script src="/js/live.js"></script>
+    <script src="/js/plugins.js"></script>
+    <script src="/js/main.js"></script>
+  </body>
+</html>
