@@ -13,9 +13,9 @@ categories: misc
 On the first of November, while I was checking my Twitter stream, I got a nice
 mix between the recently started [NaNoWriMo], and [Steve Klabnik][steveKlabnik]
 & [Ashley G. Williams][ashleyGWilliams] tweets about documentation in open
-source project. The brain being what it is, a link was made and I thought it
-would be cool to have similar event to the NaNoWriMo oriented for documentation
-writing. Thus, I tweeted:
+source project. The brain being what it is, a link was made between those two
+ideas and I thought it would be cool to have an event similar to the NaNoWriMo
+but oriented to documentation writing. Thus, I tweeted:
 
 <blockquote class="twitter-tweet" lang="en"> <p lang="en" dir="ltr"> What about a National Documentation Writing Month? Write at least 50k words of doc for your/others projects. <a href="https://twitter.com/hashtag/NaNoWriMo?src=hash">#NaNoWriMo</a> <a href="https://twitter.com/hashtag/NaDoWriMo?src=hash">#NaDoWriMo</a> </p>&mdash; Mayeu (@Mayeu) <a href="https://twitter.com/Mayeu/status/660926951163617280">November 1, 2015</a> </blockquote>
 
@@ -49,9 +49,11 @@ So, during December, **one should aim at merging the equivalent of 25
 pull-request enhancing the documentation of one's or others' project·s** (may it
 be a public one, or an company internal one). You can span this on the whole
 month, or you can try to make it one merge each days until Christmas. **It can
-be a personal challenge** (helping your project, or someone else project), or
-**a community one** (organizing your community to make documentation a priority
-during this month).
+be a personal challenge** (helping your project, or someone else project by
+documenting it), or **a community one** (organizing your community to make
+documentation a priority during this month). Make it whatever match your
+situation, the goal is first and foremost to raise awareness and enhance
+documentation.
 
 Obviously, we need your help to share the love of good documentation out. So if
 you care about good documentation, please share the idea around you, tweet about
