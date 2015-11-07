@@ -1,3 +1,3 @@
-# 6x9.fr
+# mayeu.me
 
-My personal website, using [hakyll](http://jaspervdj.be/hakyll/)
+My personal website, using Jekyll.

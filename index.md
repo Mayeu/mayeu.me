@@ -5,7 +5,7 @@ layout: default
 
 **Hi, I am Matthieu «Mayeu» Maury**. I am an independent sysadmin, «devops», and software developer. I'm available for **contracting jobs and consulting**.
 
-You can contact me by e-mail: « moi [at] mayeu [dot] me ». If possible,
+You can contact me by e-mail: « m [at] mayeu [dot] me ». If possible,
 encryption is preferred [using my GPG key](/assets/0xb00da693.asc).
 
 I like to write [code](https://github.com/Mayeu) and sometimes [words](/blog).
