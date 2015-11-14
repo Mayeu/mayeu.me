@@ -1,5 +1,5 @@
 ---
-title: Matthieu Mayeu Maury - Sysadmin, automation & tea
+title: Sysadmin, automation & tea
 layout: default
 ---
 
