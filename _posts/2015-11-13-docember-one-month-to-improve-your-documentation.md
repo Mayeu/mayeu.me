@@ -33,7 +33,7 @@ Knowing that, I won’t be able to reach enough people with my account only,
 will be interesting to him. He kindly shared this idea, and this led [Matool] to
 propose the awesome *"[DOCember][docemberName]"* name, replacing the clumsy
 *"**NaDoWriMo**"* I proposed. The three of us then decided that we should write
-blog posts about this project, so here is mine :)
+blog posts about this project, so here is mine :) You can also see the one [Steve Klabnik wrote][steveDocember].
 
 ## So what will be DOCember?
 
@@ -77,3 +77,4 @@ twitter about that :)
 [Matool]: https://twitter.com/Matool13 "Matool Twitter account"
 [docemberName]: https://twitter.com/Matool13/status/661535046327623681
 [InkTober]: http://inktober.com/ "InkTober website"
+[steveDocember]: http://words.steveklabnik.com/docember
