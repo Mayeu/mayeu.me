@@ -18,9 +18,9 @@ build:
 deploy_live:
   stage: deploy
   script:
-    - rsync -arv --delete _site/ /srv/http/yourtenyearplan
+    - rsync -arv --delete _site/ /srv/http/mayeu.me
   environment:
     name: live
-    url: https://yourtenyearplan.com
+    url: https://new.mayeu.me
   only:
     - master
