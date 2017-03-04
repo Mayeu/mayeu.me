@@ -1,0 +1,26 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - make bootstrap-live
+    - make build
+  cache:
+    paths:
+      - vendor/
+      - _site/
+  artifacts:
+    paths:
+      - _site/
+
+deploy_live:
+  stage: deploy
+  script:
+    - rsync -arv --delete _site/ /srv/http/yourtenyearplan
+  environment:
+    name: live
+    url: https://yourtenyearplan.com
+  only:
+    - master

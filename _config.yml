@@ -10,7 +10,6 @@ github_username:  Mayeu
 
 # Build settings
 markdown: kramdown
-highlighter: pygments
 
 # Server setting
 host: 0.0.0.0
