@@ -5,15 +5,17 @@ bootstrap-live: ## Install all the needs gems
 	@echo "Installing gems"
 	@bundle install --path vendor/bundle
 
-bootstrap: ## Install all the needs gems
+bootstrap: Gemfile.lock ## Install all the needs gems
 	@echo "Installing gems"
+
+Gemfile.lock: Gemfile
 	@bundle install
 
 s: serve ## Start Jekyll server in watch mode
 
 serve: server ## Start Jekyll server in watch mode
 
-server: ## Start Jekyll server in watch mode
+server: bootstrap ## Start Jekyll server in watch mode
 	@echo "Starting Jekyll server"
 	@bundle exec jekyll server --watch --host 0.0.0.0 --drafts
 

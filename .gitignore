@@ -1,14 +1,3 @@
-*.zip
-*.swp
-*.swo
-.sass-cache/
-build/
-tmp/
-crash.log
-output
-.gs
-*.o
-*.hi
-site
-_site/
-_cache/
+_site
+.sass-cache
+.jekyll-metadata
