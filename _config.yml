@@ -22,12 +22,12 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://mayeu.me" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Build settings
-#markdown: kramdown
 livereload: true
 
 exclude:
   - Gemfile
   - Gemfile.lock
+  - Rakefile
 
 # main text of home
 name: Mayeu
@@ -43,7 +43,7 @@ picture: assets/images/profile.png
 
 # If you want to include your resume, set to true
 # and specify source (external or local).
-resume: fales
+resume: false
 resume-external: true
 resume-url: https://google.com/?q=my+resume
 
@@ -59,11 +59,6 @@ permalink: /blog/:title/
 # analytics-piwik-url: 'piwik.my-host.com'
 # analytics-piwik-id: 1
 
-# if you don't want comments in your posts, leave categories empty
-#disqus:
-#  shortname: mydisqus # enter this from your disqus account
-#  categories: [blog, project] # only show disqus for posts that have these categories
-#
 # if you don't have any of social below, comment the line
 #facebook: myfacebook
 twitter: Mayeu
