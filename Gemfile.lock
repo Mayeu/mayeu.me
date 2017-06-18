@@ -118,6 +118,7 @@ GEM
     jekyll-github-metadata (2.3.1)
       jekyll (~> 3.1)
       octokit (~> 4.0, != 4.4.0)
+    jekyll-graphviz (0.1.0)
     jekyll-livereload (0.2.2)
       em-websocket (~> 0.5)
       jekyll (~> 3.0)
@@ -225,6 +226,7 @@ DEPENDENCIES
   indigo!
   jekyll
   jekyll-feed (~> 0.6)
+  jekyll-graphviz
   jekyll-livereload
   jekyll-seo-tag
   json

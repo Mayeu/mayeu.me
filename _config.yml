@@ -13,18 +13,18 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Your awesome title
-email: your-email@domain.com
+title: Mayeu.me
+email: m@mayeu.me
 description: > # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  Writting about sysadmin, devops, and development practice. Drinking tea, and
+  traveling.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://mayeu.me" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Build settings
-markdown: kramdown
+#markdown: kramdown
 theme: indigo
+livereload: true
 
 exclude:
   - Gemfile
@@ -32,10 +32,10 @@ exclude:
 
 # main text of home
 name: Mayeu
-bio: I mostly do computering.
+bio: "I mostly do computering and tea :tea:."
 
 # twitter summary info
-description: A blog about technology and stuff related
+description: A blog about what I do and work on.
 
 # if it's an external image, update below for true
 # better with square images
@@ -51,7 +51,7 @@ resume-url: https://google.com/?q=my+resume
 url: https://mayeu.me
 # your url: http://USERNAME.github.io
 
-permalink: /:title/
+permalink: /blog/:title/
 
 # To enable google analytics, supply your token below
 # analytics-google: 'UA-MYANALYTICS'
@@ -86,7 +86,7 @@ email: m@mayeu.me
 authors:
     mayeu:
         name: Mayeu
-        bio: A Man who travels the world eating noodles
+        bio: I mostly do computering and tea :tea:.
         external-image: false
         picture: assets/images/profile.png
         twitter: Mayeu

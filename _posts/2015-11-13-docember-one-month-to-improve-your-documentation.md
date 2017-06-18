@@ -1,8 +1,11 @@
 ---
 layout: post
 title: "DOCember: one month to improve your documentation"
-categories: blog
+category: blog
 author: mayeu
+tag:
+- documentation
+- practice
 ---
 
 > ***TL;DR**: During December, merge or propose 25 pull-requests (or equivalent)
