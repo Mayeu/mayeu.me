@@ -1,4 +1,4 @@
-﻿---
+---
 layout: post
 title: "Creating an Internal Certificate Authority With cfssl"
 category: blog
@@ -8,7 +8,13 @@ tag:
 - automation
 ---
 
-## Goals of this article
+## Overview
+{:.no_toc}
+
+* ToC
+{:toc}
+
+## Goals of This Article
 
 In this article we are going to create a certificate authority (CA) using the
 `cfssl` tool from CloudFlare. A certificate authority allows you to issue your
@@ -19,8 +25,10 @@ only be used inside the infrastructure, and not shown to the rest of the
 world).
 
 This article covers:
-- Creating a root CA that can only only have 2 intermediate CA in the chain (to only have one online CA)
-- Creating intermediate CA that are dedicated to one role (one for web certificates, one for RabbitMQ certificates, etc.)
+- Creating a root CA that can only only have 2 intermediate CA in the chain (to
+  only have one online CA)
+- Creating intermediate CA that are dedicated to one role (one for web
+  certificates, one for RabbitMQ certificates, etc.)
 - Ensuring that the last intermediate CA of the chain can't create new CA
 
 What is not covered by the article:
@@ -35,7 +43,7 @@ Let's dive in!
 
 <div class="breaker"></div>
 
-## CA for dummies
+## What is a CA Chain?
 
 <div style="float: right; text-align: center; margin: 20px;">
 {% digraph simplest CA %}
@@ -45,12 +53,14 @@ rootca
 {% enddigraph %}
 <figcaption class="caption">The simplest CA</figcaption>
 </div>
-First, some context and vocabulary we are going to use.
+This section covers some context and vocabulary we are going to use. If you are
+well aware of how CA are working, you can jump directly to the [next
+section](#creating-your-ca).
 
 The simplest certificate authority we can have is only composed of the root
 certificate, often called "Root CA".
 
-As soon as you have this, you can issue a leaf certificate.
+As soon as we have this, we can issue a leaf certificate.
 <div style="float: left; text-align: center; margin: 20px;">
 {% digraph simplest CA issuing certs %}
 node [shape=box]
@@ -150,12 +160,11 @@ of `cfssl`. Note that this commit is more advanced than the current
 works with this article. Sadly there was not yet any official release since
 this tag.
 
-
 We are going to work in a dedicated folder:
 
-<pre class="command-line" data-user="m" data-host="bw">
-<code>mkdir our-ca</code>
-</pre>
+```
+mkdir our-ca
+```
 
 `cfssl` use has a main configuration file that contains our various CAs'
 profiles. Let's first add our root CA configuration in this `cfssl-config.json`
@@ -184,51 +193,79 @@ file:
 Here we defined a profile named `root-ca`, that uses shiny `ecdsa`
 cryptographic key, and can only be valide for 5 year.
 
-Added to that, 
+With the profile, we first need to create a *certificate signing request*, that
+contains details about our CA. Again, with `cfssl` this file is a json file,
+and in this example I called it `root-ca-csr.json`:
 
-
-Now you can create a signing request `root-ca-csr.json`:
 ```json
 {
-    "CN": "Yourte root CA",
     "ca": {
       "pathlen": 2
     },
+    "CN": "Our root CA",
     "names": [
         {
-            "C": "Milky Way",
-            "ST": "Solar system",
-            "L": "Earth",
-            "O": "Yourte",
-            "OU": "Security Dream Team"
+            "C": "Our country",
+            "ST": "Our state",
+            "L": "Our city",
+            "O": "Our organisation",
+            "OU": "Our organisational unit"
         }
     ]
 }
 ```
 
-- Max 2 sub-CA
+The `ca` hash represent again some CA specific configuration. Here, we make
+sure our Root CA can only have a maximum of 2 intermediate CA under it. This
+avoid creating chain that are more deep than planned originaly. For example if
+one don't successfully access our last intermediate CA, but successfully create
+a signing request for a new intermediate CA under the last one.
 
-Now create your CA with the `root-ca` profile:
+After that, `CN` is the common name of our certificate, here it's the name we
+give to our root. In a web leaf certificate this is where you put the domain
+you want to protect.
+
+Finally the `names` array, contains the usual (and optional) data you can find
+in a certificate. Fill it as you wish.
+
+With both those file, we can create the CA with the following command:
 ```
 $ cfssl gencert -config="cfssl-config.json" -profile="root-ca" \
               -initca root-ca-csr.json | cfssljson -bare root-ca
 ```
 
-This will create `root-ca-key.pem`, `root-ca.pem`, and the certificate request `root-ca.csr`.
+`cfssl` actually return a JSON structure, so to convert it into a normal
+certificate we pipe the command into `cfssljson`. We use the `-bare` option
+since we are not using cfssl through the HTTP API.
 
-You can see the details of your CA with:
+The command is self explicit enough, we use `cfssl` to generate a certificate
+following the `root-ca` profile and the csr made for it, using the previously
+made configuration, and since it's a certificate for a CA we use the `-initca`
+option.
+
+This command created the `root-ca-key.pem`, `root-ca.pem`, and the certificate
+request `root-ca.csr`.
+
+Using the `openssl` cli, you can see the details of your CA:
 ```
 $ openssl x509 -in root-ca.pem -text
 ```
 
-Now, ensure to secure your CA's key! You should encrypt it (out of scope for this article), and keep it offline!
+Now, ensure to secure your CA's key! You should encrypt it (out of scope for
+this article), and keep it offline! Ideally you should have made this step on a
+purelly offline computer.
 
-## Creating your (offline) intermediate 1 CA
+## Creating a First (Offline) Intermediate CA
 
-We are going to add a new `intermediate-1-ca` profile in our `cfssl-config.json` after the `root-ca` one. It will have  max_path_len of 1 and it will only be capable of signing crl and certs (be careful, the way the path len is define in the intermediate certificate is not the same as with the root-ca, not sure if there is any rational behind that):
+Let's add a new `intermediate-ca-1` profile in our `cfssl-config.json` just
+after the `root-ca` one. This time we are going to use a ` max_path_len` of 1
+since the root CA only allow a chain length of 2. Also it will only be capable
+of signing crl and certs (be careful, the way the path len is define in the
+intermediate certificate is not the same as with the root-ca, not sure if there
+is any rational behind that, beside the fact that `cfssl` is in development):
 
 ```json
-"intermediate-1-ca": {
+"intermediate-ca-1": {
   "expiry": "43800h",
   "key": {
     "algo": "ecdsa",
@@ -245,10 +282,13 @@ We are going to add a new `intermediate-1-ca` profile in our `cfssl-config.json`
 }
 ```
 
-Now we can create an intermediate 1 CA `intermediate-1-web-csr.json`, here for our web service:
+Again, we need to create a csr to generat the actual certificates. This time it
+is called `intermediate-web-1-csr.json`, since it will be dedicated to our web
+certificates:
+
 ```json
 {
-  "CN": "Yourte Web Intermediate 1 CA",
+  "CN": "Our Web Intermediate CA 1",
   "names": [
     {
       "OU": "Web Dream Team"
@@ -257,26 +297,33 @@ Now we can create an intermediate 1 CA `intermediate-1-web-csr.json`, here for o
 }
 ```
 
-Now, create your intermediate 1 ca:
+This time when we create the certificates, we define the `-ca` and `-ca-key`
+option instead of the `-initca` one, that should point to our root CA
+certificates & key. Otherwise our root won't be signing this intermediate CA.
+
 ```
 $ cfssl gencert -ca root-ca.pem -ca-key root-ca-key.pem \
-        -config="cfssl-config.json" -profile="intermediate-1-ca" \
-        intermediate-1-web-csr.json |
-  cfssljson -bare intermediate-1-web-ca
+        -config="cfssl-config.json" -profile="intermediate-ca-1" \
+        intermediate-web-1-csr.json |
+  cfssljson -bare intermediate-web-1-ca
 ```
 
 Again you can check the certificate with:
 ```
-$ $ openssl x509 -in intermediate-1-web-ca.pem -text
+$ $ openssl x509 -in intermediate-web-1-ca.pem -text
 ```
 
-And you'll see that this is a CA with a max_path_len of 1.
+And you'll see that this is a CA with a `max_path_len` of 1.
 
-# Creating your (online) intermediate 2 CA
+## Creating The Second Intermediate CA
 
-Now, for the second CA it will be almost the same configuration, so let's copy the previous configuration over and change the max_path_len, and expiry (only one year for our online CA):
+The second intermediate CA will have almost the same configuration as the first
+one.  The main change being that now `max_path_len` will be set to 0 (note that
+we also need the option `max_path_len_zero` after that). Since this
+intermediate CA is online, we are also going to use a shorter expiry time.
+
 ```json
-"intermediate-2-ca": {
+"intermediate-ca-2": {
   "expiry": "8760h",
   "key": {
     "algo": "ecdsa",
@@ -294,7 +341,8 @@ Now, for the second CA it will be almost the same configuration, so let's copy t
 }
 ```
 
-Now our csr config `intermediate-2-web-csr.json`:
+Now our csr config `intermediate-web-2-csr.json`:
+
 ```json
 {
   "CN": "Yourte Web Intermediate 2 CA",
@@ -306,24 +354,33 @@ Now our csr config `intermediate-2-web-csr.json`:
 }
 ```
 
-Create the second CA:
+And again, we create the CA using the `cfssl` command line. This time, the
+`-ca` and `-ca-key` should point to the first intermediate CA to continue the
+chain:
+
 ```
-$ cfssl gencert -ca intermediate-1-web-ca.pem \
-        -ca-key intermediate-1-web-ca-key.pem -config="cfssl-config.json" \
-        -profile="intermediate-2-ca" intermediate-2-web-csr.json |
-  cfssljson -bare intermediate-2-web-ca
+$ cfssl gencert -ca intermediate-web-1-ca.pem \
+        -ca-key intermediate-web-1-ca-key.pem -config="cfssl-config.json" \
+        -profile="intermediate-ca-2" intermediate-web-2-csr.json |
+  cfssljson -bare intermediate-web-2-ca
 ```
 
-Again you can check the certificate with:
+Again we can check the certificate with:
+
 ```
 $ openssl x509 -in intermediate-2-web-ca.pem -text
 ```
 
-And you'll see that this is a CA with a max_path_len of 0, meaning that this CA will only be able to create leaf certificates, and no other CA.
+And we'll see that this time the `max_path_len` will be  0, so we won't be able
+to create another CA using this one.
 
-## Create a leaf certificate with your CA chains
+## Creating a Leaf Certificate With Your CA Chains
 
-We create a dedicated profile for those leafs certificates:
+For our leaf certificate we are going to use `rsa` as a crypto algo as it is
+more supported out there. The main change from the previous profile is the
+usages that only allow `server auth`, so we can only create certificate that
+authentify servers. We also reduce the max lifetime to 90 days.
+
 ```json
 "web-leaf": {
   "ca_constraint": {
@@ -340,18 +397,15 @@ We create a dedicated profile for those leafs certificates:
 }
 ```
 
-This contains the common data for all our leaf certificates. Now we can create a csr for one of those certificate:
+This profile contain the common data of all our leaf certificates. Now we can
+create a csr for one of those certificate:
 
 ```json
 {
-    "CN": "admin.ma-yourte.net",
+    "CN": "admin.our-web.net",
     "hosts": [
-      "admin.ma-yourte.ch"
+      "admin.our-web.ch"
     ],
-    "key": {
-        "algo": "rsa",
-        "size": 4096
-    },
     "names": [
         {
             "OU": "A Web Service"
@@ -360,34 +414,44 @@ This contains the common data for all our leaf certificates. Now we can create a
 }
 ```
 
-And we generate one:
+And we can generate it using the second intermediate CA:
 ```
-$ cfssl gencert -ca intermediate-2-web-ca.pem \
-        -ca-key intermediate-2-web-ca-key.pem -config="cfssl-config.json" \
-        -profile="web-leaf" admin.ma-yourte.net.json |
-  cfssljson -bare admin.ma-yourte.net
+$ cfssl gencert -ca intermediate-web-2-ca.pem \
+        -ca-key intermediate-web-2-ca-key.pem -config="cfssl-config.json" \
+        -profile="web-leaf" admin.our-web.net.json |
+  cfssljson -bare admin.our-web.net
 ```
 
-As always you can check your certificate via:
+As always we can check the certificate via:
 ```
 $ openssl x509 -in admin.ma-yourte.net.pem -text
 ```
 
-## What do we have now, and what can we do?
+## What do we have now, and what can we do next?
 
-Until now we created only one chains, and as you see we use "web" everywhere to make it tacitly a certificate authority to authenticate the HTTPS protocol. Now we can create another chain for other purpose, for example for a VPN, RabbitMQ, or other tools that need encryption to protect communication.
+Until now we created only one chains, and as you see we use "web" everywhere to
+make it tacitly a certificate authority to authenticate the HTTPS protocol. Now
+we can create another chain for other purpose, for example for a VPN, RabbitMQ,
+or other tools that need encryption to protect communication.
 
-This segmentation by intermediate certificate chain helps you to ensure that a certificate for one usage is not used for another. For example, your VPN will only recognize one chain, so somebody putting its hand on a web certificate will not be able to connect to the VPN. You could also repudiate a full chain at once in case your online CA get hacked.
+This segmentation by intermediate certificate chain helps you to ensure that a
+certificate for one usage is not used for another. For example, your VPN will
+only recognize one chain, so somebody putting its hand on a web certificate
+will not be able to connect to the VPN. You could also repudiate a full chain
+at once in case your online CA get hacked.
 
 Now you can automate your certificate creation via multiple mean:
 - cfssl can run in server mode in an host
-- You can use your usual configuration management tool (like Ansible or Puppet) to run the needed command and distribute the files
+- You can use your usual configuration management tool (like Ansible or Puppet)
+  to run the needed command and distribute the files
 - Vault could be use to generate certs on the fly when needed
 
 ## References
+
 - [Intermediate CA config](https://gist.github.com/riyad/e9dd6e688ea5de69a65a)
 - [How to Generate a Self-Signed Root Certificate with CF-SSL](https://fernandobarillas.com/blog/2015/07/22/how-to-generate-a-self-signed-root-certificate-with-cf-ssl/)
 - [Creating an Intermediate CA for MITMProxy](https://fernandobarillas.com/blog/2015/08/06/creating-an-intermediate-ca-for-mitmproxy/)
 - [cfssl doc](https://github.com/cloudflare/cfssl/blob/master/doc/cmd/cfssl.txt)
 - [pathLenConstraint question on SO](https://stackoverflow.com/questions/6616470/certificates-basic-constraints-path-length#6617814)
 - [How to build your own public key infrastructure](https://blog.cloudflare.com/how-to-build-your-own-public-key-infrastructure/)
+
