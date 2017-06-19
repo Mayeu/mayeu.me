@@ -440,13 +440,16 @@ only recognize one chain, so somebody putting its hand on a web certificate
 will not be able to connect to the VPN. You could also repudiate a full chain
 at once in case your online CA get hacked.
 
-Now you can automate your certificate creation via multiple mean:
-- cfssl can run in server mode in an host
+As a next step, you can automate your certificate creation via multiple mean:
+- `cfssl` can run in server mode in an host
 - You can use your usual configuration management tool (like Ansible or Puppet)
   to run the needed command and distribute the files
-- Vault could be use to generate certs on the fly when needed
+- [Vault](https://www.vaultproject.io) could be use to generate certs on the
+  fly when needed
 
 ## References
+
+TODO: sort that.
 
 - [Intermediate CA config](https://gist.github.com/riyad/e9dd6e688ea5de69a65a)
 - [How to Generate a Self-Signed Root Certificate with CF-SSL](https://fernandobarillas.com/blog/2015/07/22/how-to-generate-a-self-signed-root-certificate-with-cf-ssl/)
