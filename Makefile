@@ -20,7 +20,7 @@ server: bootstrap ## Start Jekyll server in watch mode
 	@bundle exec jekyll server --watch --host 0.0.0.0 --drafts
 
 build: ## Build the project
-	@echo "Building Bonjour Wildcard"
+	@echo "Building mayeu.me"
 	@bundle exec jekyll build
 
 help: ## This help
