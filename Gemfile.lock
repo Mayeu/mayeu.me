@@ -99,7 +99,6 @@ GEM
       pathutil (~> 0.9)
       rouge (~> 1.7)
       safe_yaml (~> 1.0)
-    jekyll-analytics (0.1.5)
     jekyll-athena (0.0.2)
     jekyll-avatar (0.4.2)
       jekyll (~> 3.0)
@@ -220,7 +219,6 @@ DEPENDENCIES
   github-pages
   html-proofer
   jekyll
-  jekyll-analytics
   jekyll-athena
   jekyll-feed (~> 0.6)
   jekyll-graphviz

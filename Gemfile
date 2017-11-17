@@ -24,7 +24,6 @@ group :jekyll_plugins do
   gem 'jekyll-graphviz'
   gem 'jekyll-athena'
   gem 'github-pages'
-  gem 'jekyll-analytics'
 end
 
 group :dev do
