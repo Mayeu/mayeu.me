@@ -18,17 +18,15 @@ gem "json"
 
 # If you have any plugins, put them here!
 group :jekyll_plugins do
-   gem "jekyll-feed", "~> 0.6"
-   gem 'jekyll-seo-tag'
-   gem 'jekyll-livereload'
-   gem 'github-pages'
-   gem 'jekyll-graphviz'
-gem "jekyll-athena"
+  gem "jekyll-feed", "~> 0.6"
+  gem 'jekyll-seo-tag'
+  gem 'jekyll-livereload'
+  gem 'jekyll-graphviz'
+  gem 'jekyll-athena'
+  gem 'github-pages'
+  gem 'jekyll-analytics'
 end
 
 group :dev do
   gem 'html-proofer'
 end
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

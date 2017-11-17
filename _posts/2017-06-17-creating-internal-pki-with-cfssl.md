@@ -2,7 +2,6 @@
 layout: post
 title: "Creating an Internal Certificate Authority With cfssl"
 category: blog
-author: mayeu
 tag:
 - pki
 - automation
