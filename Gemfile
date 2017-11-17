@@ -23,6 +23,7 @@ group :jekyll_plugins do
    gem 'jekyll-livereload'
    gem 'github-pages'
    gem 'jekyll-graphviz'
+gem "jekyll-athena"
 end
 
 group :dev do

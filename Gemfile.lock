@@ -99,6 +99,7 @@ GEM
       pathutil (~> 0.9)
       rouge (~> 1.7)
       safe_yaml (~> 1.0)
+    jekyll-athena (0.0.2)
     jekyll-avatar (0.4.2)
       jekyll (~> 3.0)
     jekyll-coffeescript (1.0.1)
@@ -218,6 +219,7 @@ DEPENDENCIES
   github-pages
   html-proofer
   jekyll
+  jekyll-athena
   jekyll-feed (~> 0.6)
   jekyll-graphviz
   jekyll-livereload
@@ -226,7 +228,7 @@ DEPENDENCIES
   tzinfo-data
 
 RUBY VERSION
-   ruby 2.4.1p111
+   ruby 2.4.2p198
 
 BUNDLED WITH
-   1.14.6
+   1.16.0
