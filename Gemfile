@@ -24,6 +24,8 @@ group :jekyll_plugins do
   gem 'jekyll-graphviz'
   gem 'jekyll-athena'
   gem 'github-pages'
+#  gem 'jekyll-multiple-languages-plugin'
+  gem 'jekyll-hackhack', :path => '_plugins/jekyll-hackhack'
 end
 
 group :dev do

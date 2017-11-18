@@ -13,17 +13,22 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-theme: jekyll-athena
+theme: jekyll-hackhack
+
 title: Hi, I'm Mayeu
-email: m@mayeu.me
 description: I mostly do computering, tea :tea:, and traveling
+
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://mayeu.me" # the base hostname & protocol for your site, e.g. http://example.com
-github_username:  Mayeu
-repository: Mayeu/mayeu.me
 
-social_link: twitter
-social_username: Mayeu
+email: m@mayeu.me
+social:
+  - service: github
+    username: Mayeu
+    link: https://github.com/Mayeu
+  - service: twitter
+    username: Mayeu
+    link: https://twitter.com/Mayeu
 
 # Build settings
 livereload: true
@@ -35,9 +40,16 @@ gems:
   - jekyll-gist
   - jekyll-feed
   - jemoji
+    #  - jekyll-multiple-languages-plugin
+
 exclude:
   - Gemfile
   - Gemfile.lock
   - Makefile
   - vendor
   - test-site
+
+# --- Jekyll multiple language support ----------------------------------------
+#languages: ["en", "fr"]
+#exclude_from_localizations: ["assets"]
+
