@@ -1,15 +1,19 @@
 .PHONY: install s serve server build help
 .DEFAULT_GOAL := help
 
-bootstrap-live: ## Install all the needs gems
+bootstrap-live: _plugins/jekyll-hackhack ## Install all the needed dependencies
 	@echo "Installing gems"
 	@bundle install --path vendor/bundle
 
-bootstrap: Gemfile.lock ## Install all the needs gems
+bootstrap: _plugins/jekyll-hackhack Gemfile.lock ## Install all the needs dependencies
 	@echo "Installing gems"
 
 Gemfile.lock: Gemfile
 	@bundle install
+
+_plugins/jekyll-hackhack:
+	@git submodule init
+	@git submodule update
 
 s: serve ## Start Jekyll server in watch mode
 
