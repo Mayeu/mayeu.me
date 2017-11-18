@@ -2,18 +2,18 @@
 .DEFAULT_GOAL := help
 
 bootstrap-live: _plugins/jekyll-hackhack ## Install all the needed dependencies
-	@echo "Installing gems"
+	@echo "Installing gems & downloading submodules"
 	@bundle install --path vendor/bundle
 
-bootstrap: _plugins/jekyll-hackhack Gemfile.lock ## Install all the needs dependencies
-	@echo "Installing gems"
+bootstrap: Gemfile.lock ## Install all the needs dependencies
+	@echo "Installing gems & downloading submodules"
 
-Gemfile.lock: Gemfile
+Gemfile.lock: Gemfile _plugins/jekyll-hackhack
 	@bundle install
 
 _plugins/jekyll-hackhack:
-	@git submodule init
-	@git submodule update
+	@git submodule sync --recursive
+	@git submodule update --init --recursive
 
 s: serve ## Start Jekyll server in watch mode
 
