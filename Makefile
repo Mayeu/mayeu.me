@@ -9,8 +9,7 @@ bootstrap: git-submodules Gemfile.lock ## Install all the needs dependencies
 
 git-submodules:
 	@echo "Initialise submodules"
-	@git submodule sync --recursive
-	@git submodule update --init --recursive
+	@git submodule update --init --recursive --remote
 
 Gemfile.lock: Gemfile
 	@echo "Installing gems"
