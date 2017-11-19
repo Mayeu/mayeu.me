@@ -1,7 +1,7 @@
 PATH
   remote: _plugins/jekyll-hackhack
   specs:
-    jekyll-hackhack (0.2.2)
+    jekyll-hackhack (0.2.3)
 
 GEM
   remote: http://rubygems.org/
