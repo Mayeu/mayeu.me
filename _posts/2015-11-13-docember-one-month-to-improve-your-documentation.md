@@ -2,6 +2,8 @@
 layout: post
 title: "DOCember: one month to improve your documentation"
 category: blog
+ref: docember-one-month-to-improve-your-documentation
+lang: en
 ---
 
 > ***TL;DR**: During December, merge or propose 25 pull-requests (or equivalent)

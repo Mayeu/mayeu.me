@@ -15,8 +15,13 @@
 # in the templates via {{ site.myvariable }}.
 theme: jekyll-hackhack
 
-title: Hi, I'm Mayeu
-description: I mostly do computering, tea :tea:, and traveling
+t:
+  en:
+    title: Hi, I'm Mayeu
+    description: I mostly do computering, tea :tea:, and traveling
+  fr:
+    title: Salut, je suis Mayeu
+    description: Je fais principalement de l'ordinateur, du thé :tea:, et des voyages
 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://mayeu.me" # the base hostname & protocol for your site, e.g. http://example.com
@@ -40,7 +45,7 @@ gems:
   - jekyll-gist
   - jekyll-feed
   - jemoji
-    #  - jekyll-multiple-languages-plugin
+  - jekyll-data
 
 exclude:
   - Gemfile
@@ -48,8 +53,3 @@ exclude:
   - Makefile
   - vendor
   - test-site
-
-# --- Jekyll multiple language support ----------------------------------------
-#languages: ["en", "fr"]
-#exclude_from_localizations: ["assets"]
-

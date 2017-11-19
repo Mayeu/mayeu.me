@@ -5,6 +5,7 @@ category: blog
 tag:
 - pki
 - automation
+lang: en
 ---
 
 ## Overview
