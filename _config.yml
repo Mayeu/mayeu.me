@@ -46,6 +46,7 @@ gems:
   - jekyll-feed
   - jemoji
   - jekyll-data
+  - jekyll-sitemap
 
 exclude:
   - Gemfile

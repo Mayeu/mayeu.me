@@ -26,6 +26,7 @@ group :jekyll_plugins do
   gem 'github-pages'
   gem 'jekyll-hackhack', :path => '_plugins/jekyll-hackhack'
   gem 'jekyll-data'
+  gem 'jekyll-sitemap'
 end
 
 group :dev do

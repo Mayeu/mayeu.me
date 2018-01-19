@@ -233,6 +233,7 @@ DEPENDENCIES
   jekyll-hackhack!
   jekyll-livereload
   jekyll-seo-tag
+  jekyll-sitemap
   json
 
 RUBY VERSION
