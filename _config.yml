@@ -54,3 +54,9 @@ exclude:
   - Makefile
   - vendor
   - test-site
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: /assets/me.jpg
