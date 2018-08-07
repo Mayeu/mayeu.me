@@ -5,7 +5,7 @@
 layout: home
 lang: fr
 ref: index
-title: Salut, je suis Mayeu
-description: Je fais principalement de l'ordinateur, du thé :tea:, et des voyages
+title: Accueil
+description: Hi, I'm Mayeu. Je fais principalement de l'ordinateur, du thé :tea:, et des voyages
 
 ---
