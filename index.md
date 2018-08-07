@@ -5,5 +5,6 @@
 layout: home
 lang: en
 ref: index
-title: Home
+title: Hi, I'm Mayeu
+description: I mostly do computering, tea :tea:, and travelling
 ---

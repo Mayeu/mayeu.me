@@ -5,5 +5,7 @@
 layout: home
 lang: fr
 ref: index
-title: Accueil
+title: Salut, je suis Mayeu
+description: Je fais principalement de l'ordinateur, du thé :tea:, et des voyages
+
 ---
