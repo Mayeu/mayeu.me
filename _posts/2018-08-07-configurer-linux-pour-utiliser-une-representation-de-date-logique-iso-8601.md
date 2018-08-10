@@ -25,5 +25,10 @@ standard ISO 8601 !
 Avec ça on peut donc configurer son système avec `LC_TIME=en_DK.UTF-8` et
 atteindre le nirvana des dates :pray:
 
+*Nota bene : comme son nom l'indique, le paramètre `en_DK` passe les dates en
+anglais. Utilisant mon système dans cette langue ça ne me pose pas de problème,
+malheureusement à ma connaissance il n'y a pas d'équivalent français pour ces
+paramètres :(*
+
 [iso]: https://fr.wikipedia.org/wiki/ISO_8601
 [locale]: https://fr.wikipedia.org/wiki/Param%C3%A8tres_r%C3%A9gionaux
