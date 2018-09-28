@@ -13,7 +13,6 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-theme: jekyll-hackhack
 
 t:
   en:
@@ -40,12 +39,14 @@ livereload: true
 name: Mayeu
 permalink: /blog/:title/
 markdown: kramdown
+sass:
+  style: compressed
+theme_mode: markdown
 gems:
   - jekyll-seo-tag
   - jekyll-gist
   - jekyll-feed
   - jemoji
-  - jekyll-data
   - jekyll-sitemap
 
 exclude:
@@ -54,6 +55,8 @@ exclude:
   - Makefile
   - vendor
   - test-site
+  - version
+  - Dockerfile
 
 defaults:
   - scope:

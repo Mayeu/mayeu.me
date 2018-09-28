@@ -22,11 +22,9 @@ group :jekyll_plugins do
   gem 'jekyll-seo-tag'
   gem 'jekyll-livereload'
   gem 'jekyll-graphviz'
-  gem 'jekyll-athena'
-  gem 'github-pages'
-  gem 'jekyll-hackhack', :path => '_plugins/jekyll-hackhack'
-  gem 'jekyll-data'
   gem 'jekyll-sitemap'
+  gem 'jemoji'
+  gem 'jekyll-gist'
 end
 
 group :dev do
