@@ -42,13 +42,13 @@ build docker image:
     - if test $CI_COMMIT_REF_NAME == "master"; then
         export VERSION="${CI_REGISTRY_IMAGE}:`cat version`";
       else
-        export VERSION="${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}-`cat version`";
+        export VERSION="${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG}-`cat version`";
       fi
 
   script:
-    - docker build --pull -f Dockerfile --cache-from $LATEST_TAG --tag $LATEST_TAG --tag $VERSION .
-    - docker push $LATEST_TAG
-    - docker push $VERSION
+    - docker build --pull -f Dockerfile --cache-from "$LATEST_TAG" --tag "$LATEST_TAG" --tag "$VERSION" .
+    - docker push "$LATEST_TAG"
+    - docker push "$VERSION"
   services:
     - docker:dind
   tags:
