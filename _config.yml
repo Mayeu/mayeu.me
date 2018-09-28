@@ -57,6 +57,7 @@ exclude:
   - test-site
   - version
   - Dockerfile
+  - renovate.json
 
 defaults:
   - scope:
