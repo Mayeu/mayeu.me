@@ -1,0 +1,28 @@
+<header id="home">
+
+  <h1 class="header-title"><a href="{{ site.baseurl }}">{{ site.t[page.lang].title }}</a></h1>
+
+  <p class="site-description">{{ site.t[page.lang].description }}</p>
+
+  <p class="dirty-menu">
+    {% if page.ref != 'index' %}
+      {% assign homepage = site.pages | where: 'ref', 'index' | where: 'lang', page.lang | first %}
+      <span class="dirty-item"><a class="" href="{{ homepage.url }}">{{ homepage.title }}</a></span>
+    {% endif %}
+
+    {% assign collection = site.pages %}
+    {% if page.collection == 'posts' %}
+      {% assign collection = site.posts %}
+    {% endif %}
+    {% assign translated_pages = collection | where: 'ref', page.ref | sort: 'lang' %}
+    {% for tpage in translated_pages %}
+      {% if tpage.lang != page.lang %}
+        <span class="dirty-item"><a href="{{ tpage.url }}" class="lang-{{ tpage.lang }}">{{ site.data.theme_translation.tt[tpage.lang].inlang }}</a></span>
+      {% endif %}
+    {% endfor %}
+  </ul>
+  </nav>
+
+  <!--<h1 class="header-title"></h1>-->
+  <hr/>
+</header>

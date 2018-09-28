@@ -1,15 +1,19 @@
 stages:
   - build
-  - deploy
+  - docker
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
+  JEKYLL_ENV: production
+  LC_ALL: C.UTF-8
 
 build:
   stage: build
+  image: jekyll/jekyll:3.8
   script:
-    - make bootstrap-live
-    - make build
+    #- make bootstrap-live
+    #- make build
+    - jekyll build
   cache:
     paths:
       - vendor/
@@ -17,13 +21,35 @@ build:
   artifacts:
     paths:
       - _site/
+      - version
+      - Dockerfile
 
-deploy_live:
-  stage: deploy
+build docker image:
+  stage: docker
+  image: "docker:latest"
+  variables:
+    # We don't need to get the code, everything is in the artifacts
+    GIT_STRATEGY: none
+    LATEST_TAG: $CI_REGISTRY_IMAGE:latest
+
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    # This is to warm the cache, so no need to stop the build if it fails
+    # The DEV_IMAGE is the closer to the one we are currently building so
+    # we try that one first. Then the LATEST one if it exist, otherwise we
+    # just return true
+    - docker pull $LATEST_TAG || true
+    - if test $CI_COMMIT_REF_NAME == "master"; then
+        export VERSION="${CI_REGISTRY_IMAGE}:`cat version`";
+      else
+        export VERSION="${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}-`cat version`";
+      fi
+
   script:
-    - rsync -arvO --delete _site/ /srv/http/mayeu.me
-  environment:
-    name: live
-    url: https://mayeu.me
-  only:
-    - master
+    - docker build --pull -f Dockerfile --cache-from $LATEST_TAG --tag $LATEST_TAG --tag $VERSION .
+    - docker push $LATEST_TAG
+    - docker push $VERSION
+  services:
+    - docker:dind
+  tags:
+    - docker

@@ -1,4 +1,0 @@
-[submodule "_plugins/jekyll-hackhack"]
-  path = _plugins/jekyll-hackhack
-  url = https://code.yourt.es/Mayeu/jekyll-hackhack
-  branch = master
