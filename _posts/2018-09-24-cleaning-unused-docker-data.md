@@ -9,10 +9,10 @@ lang: en
 *Warning: read the full article before typing commands you may regret.*
 
 If you are a docker user (may it be in production or on your development
-machine), you may have accumulated quite a bit of now useless data. There are
-some existing tools to clean your daemon of unused images and containers (like
-[docker-gc]), but since the [docker API 1.25][api-125] docker has an easy to
-use `prune` command that could me good enough for you.
+machine), you may have accumulated quite a bit of useless data by now. There
+are existing tools to clean your daemon of unused images and containers (like
+[docker-gc]), but since the [docker API 1.25][api-125] there is an easy to
+use `prune` command that could be good enough for you.
 
 Basic usage is pretty simple:
 
