@@ -1,11 +1,39 @@
 <hr />
 
-<p>
 {% if page.lang == "en" %}
-No comments on this blog! <strong>**Feel free to reach me via email**</strong>
-(<code class="highlighter-rouge">m [-at-] mayeu [-dot-] me</code>) if you have questions or feedback to make.
+
+<div class="grid">
+  <div class="cell -7of12">
+    <p><strong>Don't want to miss any new posts and get exclusive content?</strong> Then hop into my newsletter :)</p>
+  </div>
+  <div class="cell -1of12">
+  </div>
+  <form class="cell -4of12 form" action="https://www.getdrip.com/forms/681886851/submissions" method="post">
+    <fieldset class="form-group">
+      <input id="email" type="email" name="fields[email]" placeholder="your@email.com" class="form-control">
+    </fieldset>
+    <div class="form-actions">
+      <button type="submit" name="submit" class="btn btn-default btn-block">Get me on the list!</button>
+    </div>
+  </form>
+</div>
+
 {% elsif page.lang == "fr" %}
-Pas de commentaires sur ce blog ! <strong>**Vous pouvez me joindre via mon email**</strong>
-(<code class="highlighter-rouge">m [-at-] mayeu [-dot-] me</code>) si vous avez des questions ou des retours à faire.
+
+<div class="grid">
+  <div class="cell -7of12">
+    <p><strong>Envie de ne rien manquer et de recevoir du contenu exclusif ?</strong> J'ai une newsletter pour ça!</p>
+  </div>
+  <div class="cell -1of12">
+  </div>
+  <form class="cell -4of12 form" action="https://www.getdrip.com/forms/349963046/submissions" method="post">
+    <fieldset class="form-group">
+      <input id="email" type="email" name="fields[email]" placeholder="votre@email.com" class="form-control">
+    </fieldset>
+    <div class="form-actions">
+      <button type="submit" name="submit" class="btn btn-default btn-block">S'inscrire à la liste</button>
+    </div>
+  </form>
+</div>
+
 {% endif %}
-</p>
