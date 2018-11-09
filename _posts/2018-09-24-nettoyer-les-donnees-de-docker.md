@@ -7,7 +7,7 @@ lang: fr
 ---
 
 *Attention: lisez l'article en entier avant de taper une commande que vous
-regretterez"*
+pourriez regretter.*
 
 Si vous utilisez Docker (que ça soit en production ou sur votre machine de
 développement) vous avez surement accumulé beaucoup de données maintenant
@@ -39,6 +39,7 @@ inutilisé (les images sans containers par exemple ne sont par retirées avec
 cette commande). Pour cela il faut ajouter l'option `--all`:
 
 ```
+$ sudo docker system prune --all
 WARNING! This will remove:
         - all stopped containers
         - all networks not used by at least one container

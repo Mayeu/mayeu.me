@@ -37,6 +37,7 @@ That's nice, but it does not clean everything unused. For that you should add
 the `--all` option to remove every image and not only the dangling ones:
 
 ```
+$ sudo docker system prune --all
 WARNING! This will remove:
         - all stopped containers
         - all networks not used by at least one container
