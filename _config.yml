@@ -17,10 +17,10 @@
 t:
   en:
     title: Hi, I'm Mayeu
-    description: I mostly do computering, tea :tea:, and travelling
+    description: I mostly do computering, tea 🍵, and travelling
   fr:
     title: Salut, je suis Mayeu
-    description: Je fais principalement de l'ordinateur, du thé :tea:, et des voyages
+    description: Je fais principalement de l'ordinateur, du thé 🍵, et des voyages
 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://mayeu.me" # the base hostname & protocol for your site, e.g. http://example.com

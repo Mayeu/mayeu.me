@@ -6,6 +6,6 @@ layout: home
 lang: fr
 ref: index
 title: Accueil
-description: Hi, I'm Mayeu. Je fais principalement de l'ordinateur, du thé :tea:, et des voyages
+description: Hi, I'm Mayeu. Je fais principalement de l'ordinateur, du thé 🍵, et des voyages
 
 ---
