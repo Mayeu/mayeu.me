@@ -3,7 +3,7 @@ layout: default
 lang: fr
 ref: newsletter-one-more-step
 title: Encore une dernière étape
-description: Hi, I'm Mayeu. I mostly do computering, tea :tea:, and travelling
+description: Hi, I'm Mayeu. I mostly do computering, tea 🍵, and travelling
 ---
 
 Merci de vouloir rejoindre ma newsletter 🤗

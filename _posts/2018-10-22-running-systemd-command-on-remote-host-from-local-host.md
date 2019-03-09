@@ -26,6 +26,6 @@ $ systemctl -H root@kitten status cron
 Nice right? Under the hood this use SSH so you must have access to the host.
 And you can, of course, use any `systemctl` command, not just `status` ;)
 
-Have fun :wave:
+Have fun 👋
 
 [arch-wiki]: https://wiki.archlinux.org/index.php/systemd

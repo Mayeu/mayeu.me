@@ -31,5 +31,5 @@ $ until rsync -aP src:/path/to/copy dest/; do echo "Retrying at `date -Iminutes`
 ```
 
 Et si vous êtes vraiment fainéant, vous pouvez toujours faire un alias (laissé en exercice pour le
-lecteur ;) ).
+lecteur 😉).
 

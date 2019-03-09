@@ -23,7 +23,7 @@ hack, puisque l'anglais n'est pas vraiment officiel au Danemark) qui utilise le
 standard ISO 8601 !
 
 Avec ça on peut donc configurer son système avec `LC_TIME=en_DK.UTF-8` et
-atteindre le nirvana des dates :pray:
+atteindre le nirvana des dates 🙏
 
 *Nota bene : comme son nom l'indique, le paramètre `en_DK` passe les dates en
 anglais. Utilisant mon système dans cette langue ça ne me pose pas de problème,

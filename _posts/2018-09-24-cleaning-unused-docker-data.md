@@ -67,7 +67,7 @@ result of a command and inject it in another one as a string. The date command
 itself is decomposed as: `date -d <time description> <time format>`, where
 `+%s` is the format to get a timestamp. You can check `man date` for more info.
 
-And voilà :smiley: I rarely need the cache to be older than a month on my
+And voilà 🙂 I rarely need the cache to be older than a month on my
 laptop (and one month is already pretty conservative, but that's because I
 rarely have a good internet so I cache as much as I can).
 
@@ -79,7 +79,7 @@ cronjob on my continuous integration server:
 $ sudo docker system prune --force --all --filter until=$(date -d "1 week ago" +%s)
 ```
 
-Happy cleaning :recycle:
+Happy cleaning ♻️
 
 *A note about `sudo`: on my dev machine (which is a GNU/Linux system) I only
 use docker via `sudo` because not doing so mean that your user has the same

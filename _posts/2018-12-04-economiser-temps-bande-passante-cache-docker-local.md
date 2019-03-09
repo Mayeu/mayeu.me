@@ -10,12 +10,12 @@ Régulièrement, j'utilise Docker 🐳 dans des VMs (vagrant) ou sur d'autres
 machine de mon réseau local, et je me retrouve à télécharger plusieurs fois la
 même image sur ces différentes machines. En plus du gâchis de bande passante,
 ça devient rapidement une grosse perte de temps sur de petites connexions !
-Pour régler ce problème j'utilise maintenant registre (« registry ») Docker en
-local qui cache de manières transparentes toutes les images récupérées par
-Docker. Voici comment mettre cela en place.
+Pour régler ce problème j'utilise maintenant un registre (« registry ») Docker
+qui tourne localalement et qui cache de manières transparentes toutes les
+images récupérées par Docker. Voici comment mettre cela en place.
 
 D'abord, un peu de préparation. Nous allons créer un dossier qui va être
-utilisé par le registre pour stocker  toutes ces données. Ce dossier peut-être
+utilisé par le registre pour stocker toutes ces données. Ce dossier peut-être
 n'importe où sur votre machine, personnellement je l'ai mis dans `/var/lib` :
 
 ```
@@ -120,7 +120,7 @@ $ curl http://localhost:5000/v2/_catalog
 {"repositories":[]}
 ```
 
-Maintenant que notre registre est actif, on va configure docker pour qu'il
+Maintenant que notre registre est actif, on va configurer docker pour qu'il
 l'utilise. Pour cela il faut éditer le fichier `/etc/docker/daemon.json` pour
 ajouter la configuration suivante (qui doit être du JSON valide) :
 
@@ -205,11 +205,11 @@ instantané, et seule la décompression a pris du temps.
 
 Avec ça nous avons maintenant un cache local transparent pour toutes les images
 Docker que l'on télécharge. On peut maintenant pointer les différentes VM ou
-machine du réseau vers ce cache, et profiter du temps gagner pour faire des
+machine du réseau vers ce cache, et profiter du temps gagné pour faire des
 choses utiles plutôt que de télécharger des octets depuis internet :)
 
 Un effet secondaire intéressant de ce cache, et que si un `docker pull` échoue
-au milieu du téléchargement, les images intermédiaires déjà télécharger seront
-conservée dans le cache, et donc il ne sera pas nécessaire de les télécharger
+au milieu du téléchargement, les images intermédiaires déjà téléchargées seront
+conservées dans le cache, et donc il ne sera pas nécessaire de les télécharger
 de nouveau. Vous pouvez vérifier ça en stoppant un `pull` et en le relançant
 avec et sans le proxy.

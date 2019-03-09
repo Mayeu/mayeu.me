@@ -71,7 +71,7 @@ une autre commande. La commande `date` se décompose en `date -d <description de
 la date> <format de sortie>`. Ici le format de sortie `+%s` signifie
 "timestamp". Jetez un oeil à `man date` si vous voulez en savoir plus.
 
-Et voilà :smiley: J'ai rarement besoin de données plus vieilles qu'un mois (et
+Et voilà 🙂 J'ai rarement besoin de données plus vieilles qu'un mois (et
 même 1 mois est très conservateur, mais comme j'ai rarement accès à un bon
 débit je garde le plus possible).
 
@@ -83,7 +83,7 @@ sur mon serveur d'intégration continue dans une tâche cron:
 $ sudo docker system prune --force --all --filter until=$(date -d "1 week ago" +%s)
 ```
 
-Joyeux ménage :recycle:
+Joyeux ménage ♻️
 
 *Une note à propos de `sudo`: sur ma machine de développement (qui est un
 système GNU/Linux), j'utilise Docker exclusivement via `sudo`, car être dans le

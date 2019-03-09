@@ -29,6 +29,6 @@ Pratique non ? Les commandes sont exécutées par SSH, il est donc nécessaire
 d'avoir l'accès au serveur préalablement. Et ça n'est pas limité à `status`
 n'importe quelle commande de `systemctl` va pouvoir être lancée comme cela ;)
 
-Have fun :wave:
+Have fun 👋
 
 [arch-wiki]: https://wiki.archlinux.org/index.php/systemd

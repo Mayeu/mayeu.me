@@ -22,7 +22,7 @@ It turns out that there is an `en_DK` locale (which is really a haked locale,
 since English is not a language of Denmark), that follow the ISO 8601 standard!
 
 So you can set up your time locale using  `LC_TIME=en_DK.UTF-8` and reach
-datetime nirvana :pray:
+datetime nirvana 🙏
 
 [iso]: https://en.wikipedia.org/wiki/ISO_8601
 [locale]: https://en.wikipedia.org/wiki/Locale_(computer_software)
