@@ -205,7 +205,7 @@ Status: Downloaded newer image for redis:latest
 Nice, 3x time quicker! 👍 With the download part was almost instant, and the
 image decompression took most of the time!
 
-And done! We now have a local cache for all our Docker images, start will start
+And done! We now have a local cache for all our Docker images, that will start
 each time the docker daemon is started. We can point all our VM or machines in
 the network to it (by making listen to the outside). And we can now enjoy more
 time to focus on what matter to us and less on downloading bits from the
@@ -214,7 +214,7 @@ internet :)
 A nice effect of this caching is that intermediate images are also cached.
 Which is really useful with unstable Internet access. Because now when the
 connection is going to timeout in the middle of a pull, all the bits already
-downloaded will be cached so you can continue your pool where you left it! You
+downloaded will be cached so you can continue your pull where you left it! You
 can try that by starting to pull and image, stop it, then start it again. With
 the default daemon without cache this leads to a downloading all of the
 intermediate image again, but not with the proxy 👏
