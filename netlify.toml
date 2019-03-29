@@ -9,3 +9,20 @@
 
 [context.deploy-preview.environment]
   HUGO_VERSION = "0.54.0"
+
+[[headers]]
+  for = "/*"
+  [headers.value]
+  # Block site from being framed with X-Frame-Options and CSP
+  X-Frame-Options = "DENY"
+
+  # Prevent browsers from incorrectly detecting non-scripts as scripts
+  X-Content-Type-Options = "nosniff"
+
+  # Don't load any resource type not explicitly enabled
+  # Disable plugins like Flash or Silverlight
+  # Load images, scripts, stylesheets and fonts from self
+  # Send reports to report-uri.io
+  Content-Security-Policy = "default-src 'none'; object-src 'none'; img-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; report-uri https://<report-uri-subdomain>.report-uri.io/r/default/csp/enforce;"
+
+  X-XSS-Protection = "1; mode=block"
