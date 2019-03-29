@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="{{ $.Site.Language.Lang }}" class="bg-vdgb lgb sans-serif">
+
+<head>
+    <title>{{ $.Site.Title }}</title>
+    <base href="{{ if getenv "CONTEXT" }}{{ cond (eq "production" (getenv "CONTEXT")) (getenv "URL") (getenv "DEPLOY_PRIME_URL") }}{{ else }}{{ $.Site.BaseURL }}{{ end }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name=author content="Paul McGrath">
+    <meta name=description content="A personal site for blogging and projects">
+
+    {{ template "_internal/opengraph.html" . }}
+    {{ template "_internal/twitter_cards.html" . }}
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="manifest.json">
+    {{ $style := resources.Get "css/style.css" | fingerprint }}
+    <link rel="stylesheet" href="{{ $style.Permalink }}" integrity="{{ $style.Data.Integrity }}">
+
+    {{ range .AlternativeOutputFormats -}}
+        {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+    {{ end -}}
+
+    <meta name="flattr:id" content="vlog7n">
+    <script async defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <link rel="preconnect" href="https://api.getdrip.com">
+    <link rel="dns-prefetch" href="https://eol.yourt.es">
+</head>
+
+<body>

@@ -1,0 +1,19 @@
+<main class="content">
+
+    {{ range .Data.Pages.ByPublishDate.Reverse }}
+
+        <div class="posts">
+
+            <div class=date class="date-time-title">
+                <time>{{ .Date.Format (.Site.Params.dateform | default "Jan 02 2006") }}</time>
+            </div>
+
+            <div class="date-time-title post">
+                <a href="{{ .Permalink }}">{{ .Title }}</a>
+            </div>
+
+        </div>
+
+    {{ end }}
+    
+</main>

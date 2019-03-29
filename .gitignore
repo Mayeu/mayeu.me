@@ -1,6 +1,5 @@
-.DS_Store
-_site
-.sass-cache
-.bundle
-vendor
-test/
+node_modules/
+dist/
+site/assets/css
+sites/resources/_gen
+jekyll

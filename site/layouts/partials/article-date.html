@@ -1,0 +1,12 @@
+<div class="sans-serif f6 fw4 ttu tracked mb2 ">
+  {{ if eq .Site.Language.Lang "fr" }}
+    <time class="post-date">
+      {{ index $.Site.Data.mois (printf "%d" .Date.Month) }} {{ .Date.Year }} 
+    </time>
+  {{ else }}
+    <time>
+      {{ .Date.Format "January 2006" }}
+    </time>
+  {{ end }}
+</div>
+

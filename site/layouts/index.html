@@ -1,0 +1,22 @@
+{{ partial "head" . }}
+
+{{ partial "header" . }}
+
+<main class="fl w-100 flex flex-column items-center tc">
+
+   {{ range .Data.Pages.ByPublishDate.Reverse }}
+     <div class="mh2 mb4">
+         <div class="sans-serif f3 fw6 mw7 lh-title mb2">
+             <a class="link dim lgb" href="{{ .Permalink }}">{{ .Title }}</a>
+         </div>
+         {{ partial "article-date.html" . }}
+     </div>
+    {{ end }}
+
+    <!--<a class="link hover-light-blue ba bw1 ph4 pv2 br2 dib " href="#">-->
+        <!--<span class="sans-serif f5 fw4 ttu tracked">Archive</span>-->
+    <!--</a>-->
+
+</main>
+
+{{ partial "footer" . }}

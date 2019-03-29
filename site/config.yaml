@@ -1,0 +1,52 @@
+---
+baseURL: "/"
+title: "Personal blog by Paul McGrath"
+
+# It is written pygments, but it actually uses Chroma.
+# Naming is hard you know ¯\_(ツ)_/¯
+pygmentsCodefences: true
+pygmentsCodefencesGuessSyntax: true
+pygmentsOptions: "linenos=table"
+
+author:
+  name: "Mayeu"
+
+DefaultContentLanguage: en
+languages:
+  en:
+    title: Hi, I'm Mayeu
+    description: I mostly do computering, tea, and travelling
+    blackfriday:
+      angledQuotes: false
+    params:
+      name: "anglais"
+      switcher: "Available in English"
+
+  fr:
+    title: Salut, je suis Mayeu
+    description: Je fais principalement de l'ordinateur, du thé, et des voyages
+    blackfriday:
+      angledQuotes: true
+    params:
+      name: "français"
+      switcher: "Disponible en français"
+
+# RSS, categories and tags disabled for an easy start
+# See configuration options for more details:
+# https://gohugo.io/getting-started/configuration/#toml-configuration
+disableKinds:
+  - taxonomy
+  - taxonomyTerm
+
+params:
+  social:
+    - name: github
+      url: "https://github.com/mayeu"
+    - name: gitlab
+      url: "https://gitlab.com/mayeu"
+    - name: twitter
+      url: "https://twitter.com/mayeu"
+    - name: instagram
+      url: "https://instagram.com/m.ayeu"
+    - name: linkedin
+      url: "https://www.linkedin.com/in/mayeu"

@@ -1,0 +1,25 @@
+@import "imports/tachyons.min.css";
+
+.bg-vdgb {
+  background-color: #494f5c;
+}
+
+.lgb {
+  color: #c6cddb;
+}
+
+.b--lgb {
+  border-color: #c6cddb;
+}
+
+/* 
+ * Whyyy ? I don't know, but it is needed to make the source code responsive
+ * friendly ¯\_(ツ)_/¯
+ */
+pre {
+    max-width: 7em;
+}
+
+pre, code {
+  font-size: 0.85em;
+}

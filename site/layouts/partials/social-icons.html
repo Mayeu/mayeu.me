@@ -1,0 +1,3 @@
+{{ range . -}}
+	<a class="link dim lgb dib ml3 tc" href="{{ .url }}" target="_blank" rel="noopener" title="{{ .name | humanize }}">{{ partial "svg.html" . }}</a>
+{{- end -}}
