@@ -1,5 +1,5 @@
 node_modules/
 dist/
 site/assets/css
-sites/resources/_gen
+site/resources/_gen
 jekyll
