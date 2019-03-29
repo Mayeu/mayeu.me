@@ -21,6 +21,8 @@ site/assets/css/style.css: deps $(HTML_TEMPLATE) $(CSS_FILES) site/assets/css
 		$(NODEBIN)/`readlink node_modules/.bin/purgecss`
 
 	$(NODEBIN)/purgecss --css <($(NODEBIN)/cleancss $(CSS_FILES)) \
+		--whitelist pre  \
+		--whitelist code \
 		--content $(HTML_TEMPLATE) | jq -r ".[] | .css" \
 		> $@
 
