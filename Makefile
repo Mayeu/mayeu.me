@@ -4,30 +4,38 @@ SHELL := /bin/bash
 NODEBIN = node_modules/.bin
 HTML_TEMPLATE = $(shell find site -name '*.html')
 CSS_FILES = $(shell find src -name '*.css')
+HUGO_DEFAULT_ARGS = --destination ../dist --source site --verbose
+HUGO_PREVIEW_ARGS = --buildDrafts --buildFuture
 
-.PHONY = build css
-build: css
+.PHONY = build
+build: dist
+dist: css
+	hugo $(HUGO_DEFAULT_ARGS) $(HUGO_PREVIEW_ARGS)
+
+.PHONY = css
 css: site/assets/css/style.css
-site/assets/css/style.css: $(HTML_TEMPLATE) $(CSS_FILES) site/assets/css
+site/assets/css/style.css: deps $(HTML_TEMPLATE) $(CSS_FILES) site/assets/css
+	# Hack to make purgecss cli friendly
+	sed -i -e \
+		's/console.log(purgecss.purge())/console.log(JSON.stringify(purgecss.purge()))/' \
+		$(NODEBIN)/`readlink node_modules/.bin/purgecss`
+
 	$(NODEBIN)/purgecss --css <($(NODEBIN)/cleancss $(CSS_FILES)) \
 		--content $(HTML_TEMPLATE) | jq -r ".[] | .css" \
 		> $@
 
-.PHONY = build-dev css-dev
-build-dev: css-dev
-css-dev: $(HTML_TEMPLATE) $(CSS_FILES) site/assets/css
-	$(NODEBIN)/cleancss $(CSS_FILES) > site/assets/css/style.css
-
 site/assets/css:
 	mkdir -p $@
-
-HUGO_DEFAULT_ARGS = --destination ../dist --source site --verbose
-HUGO_PREVIEW_ARGS = --buildDrafts --buildFuture
 
 .PHONY = serve server
 serve: server
 server: build
 	hugo server $(HUGO_DEFAULT_ARGS) #$(HUGO_PREVIEW_ARGS)
+
+.PHONY = deps
+deps: node_modules
+node_modules: package.json package-lock.json
+	npm ci
 
 # TODO: Not really working, build-dev is a hack
 # make build purge the css of anything that is not needed. But if I add a new
@@ -41,3 +49,8 @@ server: build
 # then hugo rebuild the site with the new css
 watch:
 	ls -d src/**/* site/**/* | entr -r make build-dev & make server
+
+clean:
+	rm -rf dist
+	rm -rf site/assets/css
+	rm -rf node_modules
