@@ -1,0 +1,15 @@
+{{ partial "head.html" . }}
+
+{{ partial "header.html" . }}
+
+<article class="mb5 w-100 pb4 ph3-ns flex flex-column items-center">
+
+    <div class="mh3 mh0-l f4 f4-ns mw7 tl lh-copy">
+        {{ .Content }}
+    </div>
+
+</article>
+
+<script src="app.js" async></script>
+
+{{ partial "footer.html" . }}

@@ -1,11 +1,12 @@
 ---
 layout: default
-lang: fr
+lang: en
 ref: newsletter-thank-you
-title: Merci de vous être inscrit 🎉
+title: Thank you for joining 🎉
 description: Hi, I'm Mayeu. I mostly do computering, tea 🍵, and travelling
+type: page
 ---
 
-Bienvenue au club ! 🎉
+You are in! 🎉
 
-Vous entendrez rapidement parler de moi 👋
+We will keep in touch from now on 👋
