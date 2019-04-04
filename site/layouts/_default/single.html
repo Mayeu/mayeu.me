@@ -5,16 +5,34 @@
 <article class="mb5 w-100 pb4 ph3-ns flex flex-column items-center">
 
     <div class="tc">
-        <div class="sans-serif f5 fw4 ttu tracked">
+        <div class="f5 fw4 ttu tracked">
             <time>{{ .Date.Format (.Site.Params.dateform | default "January 2006") }}</time>
         </div>
-        <div class="sans-serif fw6 mv3 mh1 mh0-m mv0-m mw7 lh-title">
+        <div class="fw6 mv3 mh1 mh0-m mv0-m mw7 lh-title">
             <h1 class="f2 f1-m f1-l article-title">{{ .Title }}</h1>
         </div>
     </div>
 
-    <div class="sans-serif mh3 mh0-l f4 f4-ns mw7 tl lh-copy">
+    <div class="mh3 mh0-l f4 f4-ns mw7 tl lh-copy">
         {{ .Content }}
+    </div>
+
+    <div class="mw7 mh3 mh0-l">
+      <div class="cf">
+        {{ partial "separator-line" }}
+        <div class="fl w-100 w-two-thirds-ns pr2-ns">
+          <p><strong>Did you enjoy this article? Don't want to miss any new posts and get exclusive content?</strong> Then hop into my newsletter :)</p>
+          <p>You can also contact me directly via email: <strong>m [-at-] mayeu [-dot-] me</strong></p>
+        </div>
+        <form class="fl w-100 w-third-ns pt3" action="https://www.getdrip.com/forms/681886851/submissions" method="post">
+          <fieldset class="fl ba b--transparent ph0 mh0">
+            <input id="email" type="email" name="fields[email]" placeholder="your@email.com" class="form-control">
+          </fieldset>
+          <div class="fl pl2 pl0-ns">
+            <button type="submit" name="submit" class="b ph3 pv2 input-reset ba lgb b--lgb bg-transparent grow pointer f6">Get me on the list!</button>
+          </div>
+        </form>
+      </div>
     </div>
 
 </article>
