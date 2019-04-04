@@ -22,7 +22,7 @@
     {{ if .IsTranslated }}
       {{ range .Translations }}
       <p>
-        <a class="sans-serif link dim lgb tc" href="{{ .Permalink }}">{{ .Site.Params.Switcher }}</a>
+        <a class="sans-serif link dim lgb tc underline" href="{{ .Permalink }}">{{ .Site.Params.Switcher }}</a>
       </p>
       {{ end}}
     {{ end }}
