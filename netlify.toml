@@ -28,5 +28,5 @@
   X-XSS-Protection = "1; mode=block"
 
 [[redirects]]
-  for = "/feed.xml"
+  from = "/feed.xml"
   to = "/index.xml"
