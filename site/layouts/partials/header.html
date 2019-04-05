@@ -1,6 +1,6 @@
 <header class="fl w-100 ph3 ph5-ns mv4 tc">
   {{ $avatar := resources.Get "images/avatar.jpg" | fingerprint }}
-  <img src="{{ $avatar.Permalink }}" integrity="{{ $avatar.Data.Fingerprint }}" class="br-100 pa1 ba b--lgb h3 w3" alt="avatar">
+  <img src="{{ $avatar.Permalink }}" class="br-100 pa1 ba b--lgb h3 w3" alt="avatar">
   <h1 class="lh-title">
     <a class="link dim sans-serif f2-ns fw4 tracked lgb" href="/">{{ .Site.Params.Title }}</a>
   </h1>
