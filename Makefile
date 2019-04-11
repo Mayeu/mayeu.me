@@ -3,7 +3,7 @@ SHELL := /bin/bash
 
 NODEBIN = node_modules/.bin
 HTML_TEMPLATE = $(shell find site -name '*.html')
-CSS_FILES = $(shell find src -name '*.css')
+CSS_FILES = $(shell find src -name '*.scss')
 HUGO_DEFAULT_ARGS = --destination ../dist --source site --verbose
 HUGO_PREVIEW_ARGS = --buildDrafts --buildFuture
 
@@ -13,18 +13,22 @@ dist: css
 	hugo $(HUGO_DEFAULT_ARGS)
 
 .PHONY = css
-css: site/assets/css/style.css
-site/assets/css/style.css: deps $(HTML_TEMPLATE) $(CSS_FILES) site/assets/css
-	# Hack to make purgecss cli friendly
-	sed -i -e \
-		's/console.log(purgecss.purge())/console.log(JSON.stringify(purgecss.purge()))/' \
-		$(NODEBIN)/`readlink node_modules/.bin/purgecss`
+css: site/assets/css/style.scss
+site/assets/css/style.scss: deps $(HTML_TEMPLATE) $(CSS_FILES) site/assets/css
+	$(NODEBIN)/cleancss $(CSS_FILES) > $@
 
-	$(NODEBIN)/purgecss --css <($(NODEBIN)/cleancss $(CSS_FILES)) \
-		--whitelist pre  \
-		--whitelist code \
-		--content $(HTML_TEMPLATE) | jq -r ".[] | .css" \
-		> $@
+#site/assets/css/style.scss: deps $(HTML_TEMPLATE) $(CSS_FILES) site/assets/css
+#	# Hack to make purgecss cli friendly
+#	sed -i -e \
+#		's/console.log(purgecss.purge())/console.log(JSON.stringify(purgecss.purge()))/' \
+#		$(NODEBIN)/`readlink node_modules/.bin/purgecss`
+#
+#	$(NODEBIN)/purgecss --css <($(NODEBIN)/cleancss $(CSS_FILES)) \
+#		--whitelist pre  \
+#		--whitelist code \
+#		--whitelist blockquote \
+#		--content $(HTML_TEMPLATE) | jq -r ".[] | .css" \
+#		> $@
 
 site/assets/css:
 	mkdir -p $@

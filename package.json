@@ -13,6 +13,7 @@
   "devDependencies": {
     "clean-css-cli": "4.3.0",
     "lighthouse": "4.3.0",
-    "purgecss": "1.2.0"
+    "purgecss": "1.2.0",
+    "tachyons": "^4.10.0"
   }
 }
