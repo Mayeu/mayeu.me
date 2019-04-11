@@ -11,6 +11,9 @@ pygmentsOptions: "linenos=table"
 author:
   name: "Mayeu"
 
+permalinks:
+  posts: /:slug
+
 DefaultContentLanguage: en
 languages:
   en:
