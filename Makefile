@@ -10,7 +10,7 @@ HUGO_PREVIEW_ARGS = --buildDrafts --buildFuture
 .PHONY = build
 build: dist
 dist: css
-	hugo $(HUGO_DEFAULT_ARGS) $(HUGO_PREVIEW_ARGS)
+	hugo $(HUGO_DEFAULT_ARGS)
 
 .PHONY = css
 css: site/assets/css/style.css
@@ -30,9 +30,10 @@ site/assets/css:
 	mkdir -p $@
 
 .PHONY = serve server
+s: serve
 serve: server
 server: build
-	hugo server $(HUGO_DEFAULT_ARGS) #$(HUGO_PREVIEW_ARGS)
+	hugo server $(HUGO_DEFAULT_ARGS) $(HUGO_PREVIEW_ARGS)
 
 .PHONY = deps
 deps: node_modules
