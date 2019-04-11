@@ -5,6 +5,8 @@ category: blog
 translationKey: until-command
 lang: en
 date: '2018-01-19 18:52:42+07:00'
+aliases:
+  - /blog/run-command-until-stops/
 ---
 
 I am regularly copying big files over the internet via `rsync`, and since I am

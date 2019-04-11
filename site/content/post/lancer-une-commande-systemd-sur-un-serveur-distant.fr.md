@@ -5,6 +5,8 @@ category: blog
 translationKey: remote-systemd-command-from-local
 lang: fr
 date: 2018-10-22
+aliases:
+  - /blog/lancer-une-commande-systemd-sur-un-serveur-distant/
 ---
 
 Alors que j'étais en train de lire [l'excellent wiki d'Archlinux][arch-wiki]

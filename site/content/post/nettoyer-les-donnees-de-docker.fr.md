@@ -5,6 +5,8 @@ category: blog
 translationKey: docker-system-prune
 lang: fr
 date: 2018-09-24
+aliases:
+  - /blog/nettoyer-les-donnees-de-docker/
 ---
 
 *Attention: lisez l'article en entier avant de taper une commande que vous

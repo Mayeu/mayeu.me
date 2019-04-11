@@ -5,6 +5,8 @@ category: blog
 translationKey: until-command
 lang: fr
 date: '2018-01-19 18:52:27+07:00'
+aliases:
+  - /blog/relancer-commande-jusqua-quelle-reussisse/
 ---
 
 Régulièrement, je me retrouve à copier de gros fichiers via `rsync`, et étant

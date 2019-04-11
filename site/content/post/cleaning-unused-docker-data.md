@@ -5,6 +5,8 @@ category: blog
 translationKey: docker-system-prune
 lang: en
 date: 2018-09-24
+aliases:
+  - /blog/cleaning-unused-docker-data/
 ---
 
 *Warning: read the full article before typing commands you may regret.*

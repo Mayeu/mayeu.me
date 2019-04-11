@@ -5,6 +5,8 @@ category: blog
 translationKey: remote-systemd-command-from-local
 lang: en
 date: 2018-10-22
+aliases:
+  - /blog/running-systemd-command-on-remote-host-from-local-host/
 ---
 
 While I was reading the [pretty awesome Archlinux wiki][arch-wiki] for

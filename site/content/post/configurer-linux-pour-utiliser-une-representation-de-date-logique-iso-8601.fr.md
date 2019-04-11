@@ -5,6 +5,8 @@ category: blog
 translationKey: configure-linux-iso-8601
 lang: fr
 date: 2018-08-07
+aliases:
+  - /blog/configurer-linux-pour-utiliser-une-representation-de-date-logique-iso-8601/
 ---
 
 Durant l'une de mes nombreuses reconfigurations de Linux, je me suis demandé

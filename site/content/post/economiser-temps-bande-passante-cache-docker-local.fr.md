@@ -5,6 +5,8 @@ category: blog
 translationKey: caching-docker-image-local-registry
 lang: fr
 date: 2018-12-04
+aliases:
+  - /blog/economiser-temps-bande-passante-cache-docker-local/
 ---
 
 Régulièrement, j'utilise Docker 🐳 dans des VMs (vagrant) ou sur d'autres

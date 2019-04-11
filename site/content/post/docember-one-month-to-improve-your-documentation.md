@@ -5,6 +5,8 @@ category: blog
 translationKey: docember-one-month-to-improve-your-documentation
 lang: en
 date: 2015-11-13
+aliases:
+  - /blog/docember-one-month-to-improve-your-documentation/
 ---
 
 > ***TL;DR**: During December, merge or propose 25 pull-requests (or equivalent)

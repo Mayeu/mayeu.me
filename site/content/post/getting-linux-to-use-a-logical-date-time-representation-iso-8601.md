@@ -5,6 +5,8 @@ category: blog
 translationKey: configure-linux-iso-8601
 lang: en
 date: 2018-08-07
+aliases:
+  - /blog/getting-linux-to-use-a-logical-date-time-representation-iso-8601/
 ---
 
 During one of my many Linux reconfiguration, I wondered if there was a way for

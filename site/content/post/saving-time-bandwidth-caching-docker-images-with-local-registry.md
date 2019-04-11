@@ -5,6 +5,8 @@ category: blog
 translationKey: caching-docker-image-local-registry
 lang: en
 date: 2018-12-04
+aliases:
+  - /blog/saving-time-bandwidth-caching-docker-images-with-local-registry/
 ---
 
 On a regular basis I use Docker 🐳 in VM (vagrant), or on various machines of
