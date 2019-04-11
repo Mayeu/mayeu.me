@@ -1,7 +1,6 @@
 ---
 title: "How to Trigger Any Action When a File or Folder Changes on Macos on the Cheap"
 date: 2019-04-11
-draft: true
 layout: post
 lang: en
 category: blog
