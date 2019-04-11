@@ -1,4 +1,4 @@
-@import "imports/tachyons.min.css";
+@import "../../node_modules/tachyons/css/tachyons.min.css";
 
 .bg-vdgb {
   background-color: #494f5c;
@@ -26,4 +26,8 @@ pre, code {
 
 a {
   color: #c6cddb;
+}
+
+blockquote {
+  border-left: 3px solid #c6cddb;
 }
