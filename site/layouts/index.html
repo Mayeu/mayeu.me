@@ -4,7 +4,7 @@
 
 <main class="fl w-100 flex flex-column items-center tc">
 
-   {{ range where .Pages "Section" "post" }}
+   {{ range where .Pages "Section" "in" "post,draft" }}
      <div class="mh2 mb4">
          <div class="sans-serif f3 fw6 mw7 lh-title mb2">
              <a class="link dim lgb" href="{{ .Permalink }}">{{ .Title }}</a>
