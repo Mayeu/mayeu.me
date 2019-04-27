@@ -1,12 +1,9 @@
 ---
 layout: post
-title: "How Import a Managed Digital Ocean Kubernetes cluster in Rancher"
+title: "How to Import a Managed Digital Ocean Kubernetes cluster in Rancher"
 category: blog
-draft: true
-translationKey: docker-system-prune
+date: 2019-04-27
 lang: en
-aliases:
-  - /blog/cleaning-unused-docker-data/
 ---
 
 *This post contains affiliate links to [Digital Ocean][DO]. It will get you
@@ -14,24 +11,25 @@ $100 to test out the platform, and if at some point you start using it for real
 I will earn $25.*
 
 [Digital ocean][DO] (DO) recently announced [their managed offering for
-kubernetes](https://blog.digitalocean.com/digitalocean-releases-k8s-as-a-service/).
-Rancher is a tool that help you manage multiple Kubernetes cluster in one
-interface but does not yet support the new DO offering natively, and I was
-wondering if one could import a DO managed cluster in Rancher. Turn out you
-can, here is how.
+kubernetes][DO-blogpost].  Rancher is a tool that helps you manage multiple
+Kubernetes clusters in one interface but it does not yet support the new DO
+offering natively, and I was wondering if one could import a DO managed cluster
+in your Rancher instance.
+
+Turn out you can, here is how.
 
 ## TL;DR: just follow the importer
 
-If you already know how to use the importer for existing cluster then you are
-good to go. If not, Just go there, chose the “Existing Cluster Import” option
+If you already know how to use the importer for existing clusters then you are
+good to go. If not, just go there, chose the “Existing Cluster Import” option
 and follow the steps to import your DO managed cluster 🙂
 
 ## Illustrated Guide
 
-Here is a step by step guide on doing the import. It assume you already have a
+Here is a step by step guide on doing the import. It assumes you already have a
 Rancher instance running somewhere. (Here is [a nice and straightforward guide
 on running Rancher on
-DO](https://www.digitalocean.com/community/tutorials/how-to-set-up-multi-node-deployments-with-rancher-2-1-kubernetes-and-docker-machine-on-ubuntu-18-04)).
+DO][rancher-tuto]).
 
 * Your very first step is to go [create a managed cluster on DO][DO]. For that
   connect to your account, and in the sidebar select the “Kubernetes” menu.
@@ -39,7 +37,7 @@ DO](https://www.digitalocean.com/community/tutorials/how-to-set-up-multi-node-de
 
 {{< img src="do-01-kubernetes-setup.png" >}}
 
-* Now that your cluster is provisionning you can download its configuration. We
+* Now that your cluster is provisioning you can download its configuration. We
   are going to use it to connect to it via `kubectl`.
 
 {{< img src="do-02-download-config.png" >}}
@@ -53,7 +51,7 @@ DO](https://www.digitalocean.com/community/tutorials/how-to-set-up-multi-node-de
 {{< img src="rancher-02-select-importer.png" >}}
 
 * The importer will give you a `kubectl` command to run against your [Digital
-  Ocean][DO] cluster. Us the previously downloaded config file to run it:
+  Ocean][DO] cluster. Use the previously downloaded config file to run it:
 
 ```
 $ kubectl --kubeconfig=config-from-do.yml apply -f \
@@ -71,3 +69,5 @@ And voilà, you have imported a [Digital Ocean][DO] managed cluster in your
 Rancher 🎉
 
 [DO]: https://m.do.co/c/f1bcc66950f3
+[DO-blogpost]: https://blog.digitalocean.com/digitalocean-releases-k8s-as-a-service/?refcode=f1bcc66950f3
+[rancher-tuto]: https://www.digitalocean.com/community/tutorials/how-to-set-up-multi-node-deployments-with-rancher-2-1-kubernetes-and-docker-machine-on-ubuntu-18-04/?refcode=f1bcc66950f3
