@@ -1,5 +1,5 @@
 ---
-title: "Fix Typo in Shell Commands Easily With Fc"
+title: "Fix Mistakes in Shell Commands Easily With Fc"
 date: 2019-05-13
 draft: false
 lang: en
