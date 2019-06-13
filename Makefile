@@ -8,9 +8,14 @@ HUGO_DEFAULT_ARGS = --destination ../dist --source site --verbose
 HUGO_PREVIEW_ARGS = --buildDrafts --buildFuture
 
 .PHONY = build
-build: dist
+build: redirects dist
 dist: css
 	hugo $(HUGO_DEFAULT_ARGS)
+
+.PHONY = redirects
+redirects: dist/_redirects
+dist/_redirects: dist _redirects
+	cp _redirects $@
 
 .PHONY = css
 css: site/assets/css/style.scss
