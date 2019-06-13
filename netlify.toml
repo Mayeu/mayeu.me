@@ -30,13 +30,3 @@
 [[redirects]]
   from = "/feed.xml"
   to = "/index.xml"
-
-[[redirects]]
-  from = "http://6x9.fr/*"
-  to = "http://mayeu.me/:splat"
-  status = 301
-
-[[redirects]]
-  from = "https://6x9.fr/*"
-  to = "https://mayeu.me/:splat"
-  status = 301
