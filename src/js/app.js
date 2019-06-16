@@ -1,1 +1,0 @@
-import lazysizes from "lazysizes";
