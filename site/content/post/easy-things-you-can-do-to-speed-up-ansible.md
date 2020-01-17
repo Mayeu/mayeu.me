@@ -4,7 +4,7 @@ date: 2020-01-17
 lang: en
 ---
 
-Maybe you are using Ansible for some time and your playbooks have grown big enough to take a lot of time? Or maybe you are just trying it out and it feels already too slow for your taste? Whatever the reason, you may be wondering if there are quick changes you can do to speed things up a bit, so here are small modifications you can do right now to reclaim a bit of your time.
+Maybe you have been using Ansible for some time and your playbooks have grown big enough to take a lot of time? Or maybe you are just trying it out and it feels already too slow for your taste? Whatever the reason, you may be wondering if there are quick changes you can do to speed things up a bit, so here are small modifications you can do right now to reclaim a bit of your time.
 
 ## Connection parallelism
 If you are targeting more than one server with your playbook, the very first thing to do is to make sure Ansible connects to multiples of them at the same time. For that, you are going to set how many `forks`  are going to run concurrently.
