@@ -6,9 +6,12 @@
   HUGO_VERSION = "0.54.0"
   HUGO_ENV = "production"
   HUGO_ENABLEGITINFO = "true"
+  hugo_bin = "hugo"
 
 [context.deploy-preview.environment]
   HUGO_VERSION = "0.54.0"
+  HUGO_ENV = "production"
+  hugo_bin = "hugo"
 
 [[headers]]
   for = "/*"

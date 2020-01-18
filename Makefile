@@ -4,11 +4,12 @@ SHELL := /bin/bash
 NODEBIN = node_modules/.bin
 HUGO_DEFAULT_ARGS = --destination ../dist --source site --verbose
 HUGO_PREVIEW_ARGS = --buildDrafts --buildFuture
+hugo_bin ?= "./hugo"
 
 .PHONY = build
 build: redirects dist node_modules
 dist: 
-	./hugo $(HUGO_DEFAULT_ARGS)
+	$(hugo_bin) $(HUGO_DEFAULT_ARGS)
 
 .PHONY = redirects
 redirects: dist/_redirects
@@ -19,7 +20,7 @@ dist/_redirects: dist _redirects
 s: serve
 serve: server
 server: build
-	./hugo server $(HUGO_DEFAULT_ARGS) $(HUGO_PREVIEW_ARGS)
+	$(hugo_bin) server $(HUGO_DEFAULT_ARGS) $(HUGO_PREVIEW_ARGS)
 
 .PHONY = deps
 deps: node_modules
