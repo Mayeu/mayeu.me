@@ -4,6 +4,10 @@
   background-color: #494f5c;
 }
 
+.bg-lgb {
+  background-color: #c6cddb;
+}
+
 .lgb {
   color: #c6cddb;
 }
@@ -21,8 +25,11 @@ pre {
 }
 
 p code {
+  color: black;
   @extend .b--solid;
+  @extend .b--lgb;
   @extend .br3;
+  @extend .bg-lgb;
 }
 
 pre, code {
