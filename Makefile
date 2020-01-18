@@ -6,7 +6,7 @@ HUGO_DEFAULT_ARGS = --destination ../dist --source site --verbose
 HUGO_PREVIEW_ARGS = --buildDrafts --buildFuture
 
 .PHONY = build
-build: redirects dist
+build: redirects dist node_modules
 dist: 
 	./hugo $(HUGO_DEFAULT_ARGS)
 
@@ -28,5 +28,4 @@ node_modules: package.json package-lock.json
 
 clean:
 	rm -rf dist
-	rm -rf site/assets/css
 	rm -rf node_modules
