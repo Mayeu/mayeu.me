@@ -1,4 +1,4 @@
-@import "imports/tachyons.min.css";
+@import "tachyons.scss";
 
 .bg-vdgb {
   background-color: #494f5c;
@@ -17,7 +17,12 @@
  * friendly ¯\_(ツ)_/¯
  */
 pre {
-    max-width: 7em;
+    @extend .mw4;
+}
+
+p code {
+  @extend .b--solid;
+  @extend .br3;
 }
 
 pre, code {
@@ -25,9 +30,11 @@ pre, code {
 }
 
 a {
-  color: #c6cddb;
+  @extend .lgb;
 }
 
 blockquote {
-  border-left: 3px solid #c6cddb;
+  @extend .b--lgb, .bl, .bw3;
+  @extend .pl3, .pr3;
+  @extend .ml3, .mr3;
 }
