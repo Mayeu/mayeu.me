@@ -20,3 +20,4 @@ https://mayeu.cc/* https://mayeu.me/:splat 301!
 https://mayeu.co/* https://mayeu.me/:splat 301!
 https://mayeu.org/* https://mayeu.me/:splat 301!
 
+/feed.xml   /index.xml  301!

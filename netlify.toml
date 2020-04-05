@@ -29,17 +29,3 @@
   Content-Security-Policy = "default-src 'none'; object-src 'none'; img-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; report-uri https://<report-uri-subdomain>.report-uri.io/r/default/csp/enforce;"
 
   X-XSS-Protection = "1; mode=block"
-
-[[redirects]]
-  from = "/feed.xml"
-  to = "/index.xml"
-
-[[redirects]]
-  from = "http://6x9.fr/*"
-  to = "http://mayeu.me/:splat"
-  status = 301
-
-[[redirects]]
-  from = "https://6x9.fr/*"
-  to = "https://mayeu.me/:splat"
-  status = 301
