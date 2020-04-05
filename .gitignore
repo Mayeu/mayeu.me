@@ -2,3 +2,4 @@ node_modules/
 dist/
 site/resources/_gen
 jekyll
+bin
