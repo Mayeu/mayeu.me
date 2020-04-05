@@ -4,7 +4,8 @@ SHELL := /bin/bash
 # Hugo binary download
 HUGO_VERSION ?= 0.54.0
 HUGO_PLATFORM ?= macOS-64bit
-HUGO_FULL_VERSION = $(HUGO_VERSION)_$(HUGO_PLATFORM)
+HUGO_FLAVOR ?= extended_
+HUGO_FULL_VERSION = $(HUGO_FLAVOR)$(HUGO_VERSION)_$(HUGO_PLATFORM)
 HUGO_URL = "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_FULL_VERSION}.tar.gz"
 HUGO = bin/hugo
 
